@@ -1,20 +1,21 @@
 package types
 
-import clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
+import (
+	fmt "fmt"
 
-const (
-	QuerySubmitted = "QuerySubmitted"
+	host "github.com/cosmos/ibc-go/v4/modules/core/24-host"
 )
 
-func NewEventQuerySubmitted(
-	id, path string,
-	localTimeoutHeight clienttypes.Height,
-	localTimeoutStamp, queryHeight uint64) *EventQuerySubmitted {
-	return &EventQuerySubmitted{
-		Id:                 id,
-		Path:               path,
-		LocalTimeoutHeight: &localTimeoutHeight,
-		LocalTimeoutStamp:  localTimeoutStamp,
-		QueryHeight:        queryHeight,
-	}
-}
+const (
+	EventSendQuery = "sendQuery"
+
+	AttributeQueryData           = "query_data"
+	AttributeKeyTimeoutTimestamp = "query_timeout_timestamp"
+	AttributeKeyQueryID          = "query_id"
+	AttributeKeyTimeoutHeight    = "query_timeout_height"
+	AttributeKeyQueryHeight      = "query_height"
+)
+
+var (
+	AttributeValueCategory = fmt.Sprintf("%s_%s", host.ModuleName, ModuleName)
+)
