@@ -34,7 +34,6 @@ const (
 	KeyChannelPrefix           = "channels"
 	KeyPortPrefix              = "ports"
 	KeyQueryPrefix             = "queries"
-	KeyQueryResultPrefix       = "queriesresult"
 	KeySequencePrefix          = "sequences"
 	KeyChannelCapabilityPrefix = "capabilities"
 	KeyNextSeqSendPrefix       = "nextSequenceSend"
@@ -220,23 +219,7 @@ func PacketReceiptKey(portID, channelID string, sequence uint64) []byte {
 	return []byte(PacketReceiptPath(portID, channelID, sequence))
 }
 
-//ICS31
-
-
-
-func QueryKey(queryID string) []byte {
-	return []byte(queryPath(queryID))
-}
-
-func QueryResultKey(queryID string) []byte {
-	return []byte(queryResultPath(queryID))
-}
-
-func queryResultPath(queryID string) string {
-	return fmt.Sprintf("%s/%s", KeyQueryResultPrefix, queryID)
-}
-
-func queryPath(queryID string) string {
+func QueryPath(queryID string) string {
 	return fmt.Sprintf("%s/%s", KeyQueryPrefix, queryID)
 }
 
