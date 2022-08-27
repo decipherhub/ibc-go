@@ -12,13 +12,9 @@ import (
 
 // Keeper define 31-ibc-query keeper
 type Keeper struct {
-	storeKey sdk.StoreKey
-	cdc      codec.BinaryCodec
-
-	ics4Wrapper   types.ICS4Wrapper
-	channelKeeper types.ChannelKeeper
-	portKeeper    types.PortKeeper
-	scopedKeeper  capabilitykeeper.ScopedKeeper
+	storeKey       sdk.StoreKey
+	cdc            codec.BinaryCodec
+	scopedKeeper   capabilitykeeper.ScopedKeeper
 }
 
 // NewKeeper creates a new 31-ibc-query Keeper instance

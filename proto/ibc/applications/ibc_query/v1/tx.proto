@@ -6,7 +6,6 @@ option go_package = "github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types
 
 import "gogoproto/gogo.proto";
 import "ibc/applications/ibc_query/v1/genesis.proto";
-import "ibc/core/client/v1/client.proto";
 
 // Msg
 service Msg {
@@ -23,19 +22,19 @@ message MsgSubmitCrossChainQuery {
 
   string id                   = 1;
   string path                 = 2;
-  ibc.core.client.v1.Height local_timeout_height = 3;
+  uint64 local_timeout_height = 3;
   uint64 local_timeout_stamp  = 4;
   uint64 query_height         = 5;
   string client_id            = 6;
   // sender address
-  string sender = 7;
-
-  string source_port = 8;
-  string source_channel = 9;
+  string sender               = 7;
 }
 
 // MsgSubmitCrossChainQueryResponse
-message MsgSubmitCrossChainQueryResponse {}
+message MsgSubmitCrossChainQueryResponse {
+  MsgSubmitCrossChainQuery query      = 1;
+  uint64                   cap_key    = 2;
+}
 
 // MsgSubmitCrossChainQueryResult
 message MsgSubmitCrossChainQueryResult {
