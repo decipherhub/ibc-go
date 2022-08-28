@@ -5,11 +5,9 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
 	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
 	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
-	host "github.com/cosmos/ibc-go/v4/modules/core/24-host"
 )
 
 //var _ types.MsgServer = Keeper{}
@@ -26,39 +24,34 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	if !(msg.LocalTimeoutHeight == 0 || msg.LocalTimeoutHeight > currentHeight.RevisionHeight){
 		return nil, nil, sdkerrors.Wrapf(
 			types.ErrInvalidTimeoutHeight,
-			"localTimeoutHeight is not 0 and current height >= localTimeoutHeight(%s >= %s)", currentHeight.RevisionHeight, msg.LocalTimeoutHeight,
+			"localTimeoutHeight is not 0 and current height >= localTimeoutHeight(%d >= %d)", currentHeight.RevisionHeight, msg.LocalTimeoutHeight,
 		)
 	}
 	// Sanity-check that localTimeoutTimestamp is 0 or greater than the current timestamp, otherwise the query will always time out.
 	if !(msg.LocalTimeoutStamp == 0 || msg.LocalTimeoutStamp > currentTimestamp){
 		return nil, nil, sdkerrors.Wrapf(
 			types.ErrQuerytTimeout,
-			"localTimeoutTimestamp is not 0 and current timestamp >= localTimeoutTimestamp(%s >= %s)", currentTimestamp, msg.LocalTimeoutStamp,
+			"localTimeoutTimestamp is not 0 and current timestamp >= localTimeoutTimestamp(%d >= %d)", currentTimestamp, msg.LocalTimeoutStamp,
 		)
 	}
 
 
 	// call keeper function
 	// keeper func save query in private store
-	// k.SetQuery( 
-	// 	ctx,
-	// 	types.MsgSubmitCrossChainQuery{
-	// 		Id: msg.Id,
-	// 		Path: msg.Path,
-	// 		LocalTimeoutHeight: msg.LocalTimeoutHeight,
-	// 		LocalTimeoutStamp: msg.LocalTimeoutStamp,
-	// 		QueryHeight: msg.QueryHeight,
-	// 		ClientId: msg.ClientId,
-	// 		Sender: msg.Sender,
-	// 	},					
-	// )
-
-
-	capKey, err := capabilitykeeper.ScopedKeeper.NewCapability(capabilitykeeper.ScopedKeeper{}, ctx, host.QueryPath(msg.Id))
-	if err != nil {
-		return nil,nil, sdkerrors.Wrapf(err, "could not create query capability for query ID %s ", msg.Id)
+	query := types.MsgSubmitCrossChainQuery{
+		Id: msg.Id,
+		Path: msg.Path,
+		LocalTimeoutHeight: msg.LocalTimeoutHeight,
+		LocalTimeoutStamp: msg.LocalTimeoutStamp,
+		QueryHeight: msg.QueryHeight,
+		ClientId: msg.ClientId,
+		Sender: msg.Sender,
 	}
-	
+
+	k.SetSubmitCrossChainQuery(ctx,query)
+
+	//TODO
+	//Capablity 
 
 	// Log the query request
 	k.Logger(ctx).Info("query sent","query_id", msg.GetQueryId())
@@ -66,7 +59,7 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	// emit event 
 	EmitQueryEvent(ctx, msg)
 
-	return &types.MsgSubmitCrossChainQueryResponse{}, capKey, nil
+	return &types.MsgSubmitCrossChainQueryResponse{Query: query}, nil
 }
 
 // SubmitCrossChainQueryResult Handling SubmitCrossChainQueryResult transaction

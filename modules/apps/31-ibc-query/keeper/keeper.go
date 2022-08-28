@@ -56,24 +56,29 @@ func (k Keeper) SetNextQuerySequence(ctx sdk.Context, sequence uint64) {
 	store.Set([]byte(types.KeyNextQuerySequence), bz)
 }
 
-// SetSubmitCrossChainQuery stores the MsgSubmitCrossChainQuery in state keyed by the query id
-func (k Keeper) SetSubmitCrossChainQuery(ctx sdk.Context, query types.MsgSubmitCrossChainQuery) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.QueryKey)
-    bz := k.MustMarshalQuery(&query)
+func (k Keeper) SetSubmitCrossChainQuery(ctx sdk.Context, query types.MsgSubmitCrossChainQuery) string {
+	store := ctx.KVStore(k.storeKey)
+    bz := k.cdc.MustMarshal(&query)
+
 	store.Set(host.QueryKey(query.Id), bz)
+
+	return query.Id
 }
 
-// GetSubmitCrossChainQuery retrieve the MsgSubmitCrossChainQuery stored in state given the query id
 func (k Keeper) GetSubmitCrossChainQuery(ctx sdk.Context, queryId string) (types.MsgSubmitCrossChainQuery, bool) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.QueryKey)
-	key := host.QueryKey(queryId)
-	bz := store.Get(key)
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(host.QueryKey(queryId))
 	if bz == nil {
 		return types.MsgSubmitCrossChainQuery{}, false
 	}
 
-	return k.MustUnmarshalQuery(bz), true
+	var query types.MsgSubmitCrossChainQuery
+	k.cdc.MustUnmarshal(bz, &query)
+
+	return query, true
 }
+
+
 
 // GetAllSubmitCrossChainQueries returns a list of all MsgSubmitCrossChainQueries that are stored in state
 func (k Keeper) GetAllSubmitCrossChainQueries(ctx sdk.Context) []*types.MsgSubmitCrossChainQuery {
