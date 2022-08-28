@@ -32,8 +32,8 @@ message MsgSubmitCrossChainQuery {
 
 // MsgSubmitCrossChainQueryResponse
 message MsgSubmitCrossChainQueryResponse {
-  MsgSubmitCrossChainQuery query      = 1;
-  uint64                   cap_key    = 2;
+  string query_id     = 1;
+  uint64 cap_key    = 2;
 }
 
 // MsgSubmitCrossChainQueryResult

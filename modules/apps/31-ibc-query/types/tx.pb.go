@@ -75,8 +75,8 @@ var xxx_messageInfo_MsgSubmitCrossChainQuery proto.InternalMessageInfo
 
 // MsgSubmitCrossChainQueryResponse
 type MsgSubmitCrossChainQueryResponse struct {
-	Query  MsgSubmitCrossChainQuery  `protobuf:"bytes,1,opt,name=query,proto3" json:"query,omitempty"`
-	Index  uint64                    `protobuf:"varint,2,opt,name=index,proto3" json:"index,omitempty" yaml:"index"`
+	QueryId  string       `protobuf:"bytes,1,opt,name=query_id,proto3" json:"query_id,omitempty"`
+	Index  uint64         `protobuf:"varint,2,opt,name=index,proto3" json:"index,omitempty" yaml:"index"`
 }
 
 func (m *MsgSubmitCrossChainQueryResponse) Reset()         { *m = MsgSubmitCrossChainQueryResponse{} }
