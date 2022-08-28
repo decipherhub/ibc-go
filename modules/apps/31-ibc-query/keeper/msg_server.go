@@ -5,7 +5,6 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
 	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
 	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
 )
@@ -13,7 +12,7 @@ import (
 //var _ types.MsgServer = Keeper{}
 
 // SubmitCrossChainQuery Handling SubmitCrossChainQuery transaction
-func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmitCrossChainQuery) (*types.MsgSubmitCrossChainQueryResponse, *capabilitytypes.Capability, error) {
+func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmitCrossChainQuery) (*types.MsgSubmitCrossChainQueryResponse, error) {
 	// UnwrapSDKContext
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -22,14 +21,14 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 
 	// Sanity-check that localTimeoutHeight is 0 or greater than the current height, otherwise the query will always time out.
 	if !(msg.LocalTimeoutHeight == 0 || msg.LocalTimeoutHeight > currentHeight.RevisionHeight){
-		return nil, nil, sdkerrors.Wrapf(
+		return nil, sdkerrors.Wrapf(
 			types.ErrInvalidTimeoutHeight,
 			"localTimeoutHeight is not 0 and current height >= localTimeoutHeight(%d >= %d)", currentHeight.RevisionHeight, msg.LocalTimeoutHeight,
 		)
 	}
 	// Sanity-check that localTimeoutTimestamp is 0 or greater than the current timestamp, otherwise the query will always time out.
 	if !(msg.LocalTimeoutStamp == 0 || msg.LocalTimeoutStamp > currentTimestamp){
-		return nil, nil, sdkerrors.Wrapf(
+		return nil, sdkerrors.Wrapf(
 			types.ErrQuerytTimeout,
 			"localTimeoutTimestamp is not 0 and current timestamp >= localTimeoutTimestamp(%d >= %d)", currentTimestamp, msg.LocalTimeoutStamp,
 		)
@@ -51,7 +50,12 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	k.SetSubmitCrossChainQuery(ctx,query)
 
 	//TODO
-	//Capablity 
+	// Add Capability Key
+	// capKey, err := k.scopedKeeper.NewCapability(ctx,msg.Id)
+	// if err != nil {
+	// 	return nil, sdkerrors.Wrapf(err, "could not create query capability for query ID %s ", msg.Id)
+	// }
+	
 
 	// Log the query request
 	k.Logger(ctx).Info("query sent","query_id", msg.GetQueryId())
