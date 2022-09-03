@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -21,10 +22,10 @@ const (
 
 func NewMsgCrossChainQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "cross-chain-query [client-id] [query-path]",
+		Use:     "cross-chain-query [client-id] [query-path] [query-height]",
 		Short:   "Request ibc query on a given channel.",
 		Long:    strings.TrimSpace(`Register a payee address on a given channel.`),
-		Args:    cobra.ExactArgs(2),
+		Args:    cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -32,14 +33,15 @@ func NewMsgCrossChainQueryCmd() *cobra.Command {
 			}
 
 			creator := clientCtx.GetFromAddress().String()
-			queryId := utils.GetQueryIdentifier()
+			queryId, err := utils.GetQueryIdentifier()
+			if err != nil {
+				return err
+			}
 
 			clientId := args[0]
 			path := args[1]
+			queryHeight, _ :=  strconv.ParseUint(args[2],10, 64)
 			
-			//TODO
-			// Get chain height from queried chain
-			temporaryQueryHeight := uint64(123) 
 
 			timeoutHeightStr, err := cmd.Flags().GetString(flagPacketTimeoutHeight)
 			if err != nil {
@@ -55,7 +57,7 @@ func NewMsgCrossChainQueryCmd() *cobra.Command {
 				return err
 			}
 			
-			msg := types.NewMsgSubmitCrossChainQuery(queryId, path, timeoutHeight.RevisionHeight, timeoutTimestamp, temporaryQueryHeight, clientId, creator)
+			msg := types.NewMsgSubmitCrossChainQuery(queryId, path, timeoutHeight.RevisionHeight, timeoutTimestamp, queryHeight, clientId, creator)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
