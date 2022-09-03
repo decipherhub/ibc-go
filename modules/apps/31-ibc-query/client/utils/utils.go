@@ -6,7 +6,7 @@ import (
 )
 
 
-func GetQueryIdentifier() string {
+func GetQueryIdentifier() (string,error) {
 	return keeper.Keeper.GenerateQueryIdentifier(keeper.Keeper{}, sdk.Context{})
 }
 

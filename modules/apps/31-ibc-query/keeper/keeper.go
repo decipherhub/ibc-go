@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -31,20 +33,23 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+host.ModuleName+"-"+types.ModuleName)
 }
 
-func (k Keeper) GenerateQueryIdentifier(ctx sdk.Context) string {
+func (k Keeper) GenerateQueryIdentifier(ctx sdk.Context) (string, error){
 	nextQuerySeq := k.GetNextQuerySequence(ctx)
+	if nextQuerySeq == 0 {
+		return "", fmt.Errorf("next query sequence is nil")
+	}
 	queryID := types.FormatQueryIdentifier(nextQuerySeq)
 
 	nextQuerySeq++
 	k.SetNextQuerySequence(ctx, nextQuerySeq)
-	return queryID
+	return queryID, nil
 }
 
 func (k Keeper) GetNextQuerySequence(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get([]byte(types.KeyNextQuerySequence))
 	if bz == nil {
-		panic("next connection sequence is nil")
+		return 0
 	}
 
 	return sdk.BigEndianToUint64(bz)
