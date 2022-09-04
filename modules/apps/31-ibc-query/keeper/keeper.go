@@ -20,11 +20,11 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new 31-ibc-query Keeper instance
-func NewKeeper(cdc codec.BinaryCodec, key sdk.StoreKey,) Keeper {
+func NewKeeper(cdc codec.BinaryCodec, key sdk.StoreKey, scopedKeeper capabilitykeeper.ScopedKeeper) Keeper {
 	return Keeper{
 		cdc:      cdc,
 		storeKey: key,
-
+		scopedKeeper:  scopedKeeper,
 	}
 }
 
