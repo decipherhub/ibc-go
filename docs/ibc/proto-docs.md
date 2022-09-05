@@ -80,6 +80,9 @@
   
     - [Msg](#ibc.applications.fee.v1.Msg)
   
+- [ibc/applications/ibc_query/v1/event.proto](#ibc/applications/ibc_query/v1/event.proto)
+    - [EventQuerySubmitted](#ibc.applications.ibc_query.v1.EventQuerySubmitted)
+  
 - [ibc/applications/ibc_query/v1/genesis.proto](#ibc/applications/ibc_query/v1/genesis.proto)
     - [CrossChainQuery](#ibc.applications.ibc_query.v1.CrossChainQuery)
     - [CrossChainQueryResult](#ibc.applications.ibc_query.v1.CrossChainQueryResult)
@@ -1442,6 +1445,41 @@ Msg defines the ICS29 Msg service.
 
 
 
+<a name="ibc/applications/ibc_query/v1/event.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## ibc/applications/ibc_query/v1/event.proto
+
+
+
+<a name="ibc.applications.ibc_query.v1.EventQuerySubmitted"></a>
+
+### EventQuerySubmitted
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `path` | [string](#string) |  |  |
+| `local_timeout_height` | [ibc.core.client.v1.Height](#ibc.core.client.v1.Height) |  |  |
+| `local_timeout_stamp` | [uint64](#uint64) |  |  |
+| `query_height` | [uint64](#uint64) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
 <a name="ibc/applications/ibc_query/v1/genesis.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -1459,7 +1497,7 @@ CrossChainQuery
 | ----- | ---- | ----- | ----------- |
 | `id` | [string](#string) |  |  |
 | `path` | [string](#string) |  |  |
-| `local_timeout_height` | [uint64](#uint64) |  |  |
+| `local_timeout_height` | [ibc.core.client.v1.Height](#ibc.core.client.v1.Height) |  |  |
 | `local_timeout_timestamp` | [uint64](#uint64) |  |  |
 | `query_height` | [uint64](#uint64) |  |  |
 | `client_id` | [string](#string) |  |  |
@@ -1600,11 +1638,13 @@ MsgSubmitCrossChainQuery
 | ----- | ---- | ----- | ----------- |
 | `id` | [string](#string) |  |  |
 | `path` | [string](#string) |  |  |
-| `local_timeout_height` | [uint64](#uint64) |  |  |
+| `local_timeout_height` | [ibc.core.client.v1.Height](#ibc.core.client.v1.Height) |  |  |
 | `local_timeout_stamp` | [uint64](#uint64) |  |  |
 | `query_height` | [uint64](#uint64) |  |  |
 | `client_id` | [string](#string) |  |  |
 | `sender` | [string](#string) |  | sender address |
+| `source_port` | [string](#string) |  |  |
+| `source_channel` | [string](#string) |  |  |
 
 
 

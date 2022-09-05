@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ibc.applications.ibc_query.v1;
+
+import "ibc/core/client/v1/client.proto";
+
+option go_package = "github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types";
+
+message EventQuerySubmitted {
+  string id = 1;
+  string path = 2;
+  ibc.core.client.v1.Height local_timeout_height = 3;
+  uint64 local_timeout_stamp = 4;
+  uint64 query_height = 5;
+}
