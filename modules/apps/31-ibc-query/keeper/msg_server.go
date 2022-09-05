@@ -20,34 +20,43 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	currentHeight := clienttypes.GetSelfHeight(ctx)
 
 	// Sanity-check that localTimeoutHeight is 0 or greater than the current height, otherwise the query will always time out.
-	if !(msg.LocalTimeoutHeight == 0 || msg.LocalTimeoutHeight > currentHeight.RevisionHeight){
+	if !(msg.LocalTimeoutHeight.RevisionHeight == 0 || msg.LocalTimeoutHeight.RevisionHeight > currentHeight.RevisionHeight) {
 		return nil, sdkerrors.Wrapf(
 			types.ErrInvalidTimeoutHeight,
 			"localTimeoutHeight is not 0 and current height >= localTimeoutHeight(%d >= %d)", currentHeight.RevisionHeight, msg.LocalTimeoutHeight,
 		)
 	}
 	// Sanity-check that localTimeoutTimestamp is 0 or greater than the current timestamp, otherwise the query will always time out.
-	if !(msg.LocalTimeoutStamp == 0 || msg.LocalTimeoutStamp > currentTimestamp){
+	if !(msg.LocalTimeoutStamp == 0 || msg.LocalTimeoutStamp > currentTimestamp) {
 		return nil, sdkerrors.Wrapf(
 			types.ErrQuerytTimeout,
 			"localTimeoutTimestamp is not 0 and current timestamp >= localTimeoutTimestamp(%d >= %d)", currentTimestamp, msg.LocalTimeoutStamp,
 		)
 	}
 
-
 	// call keeper function
 	// keeper func save query in private store
 	query := types.MsgSubmitCrossChainQuery{
-		Id: msg.Id,
-		Path: msg.Path,
+		Id:                 msg.Id,
+		Path:               msg.Path,
 		LocalTimeoutHeight: msg.LocalTimeoutHeight,
-		LocalTimeoutStamp: msg.LocalTimeoutStamp,
-		QueryHeight: msg.QueryHeight,
-		ClientId: msg.ClientId,
-		Sender: msg.Sender,
+		LocalTimeoutStamp:  msg.LocalTimeoutStamp,
+		QueryHeight:        msg.QueryHeight,
+		ClientId:           msg.ClientId,
+		Sender:             msg.Sender,
 	}
 
-	k.SetSubmitCrossChainQuery(ctx,query)
+	k.SetSubmitCrossChainQuery(ctx, query)
+
+	var data []byte
+	err := query.Unmarshal(data)
+	if err != nil {
+		return nil, err
+	}
+	if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, data,
+		*msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
+		return nil, err
+	}
 
 	//TODO
 	// Add Capability Key
@@ -55,12 +64,11 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	// if err != nil {
 	// 	return nil, sdkerrors.Wrapf(err, "could not create query capability for query ID %s ", msg.Id)
 	// }
-	
 
 	// Log the query request
-	k.Logger(ctx).Info("query sent","query_id", msg.GetQueryId())
+	k.Logger(ctx).Info("query sent", "query_id", msg.GetQueryId())
 
-	// emit event 
+	// emit event
 	EmitQueryEvent(ctx, msg)
 
 	return &types.MsgSubmitCrossChainQueryResponse{QueryId: query.Id}, nil

@@ -386,7 +386,9 @@ func NewSimApp(
 	)
 
 	// IBC Query keeper
-	app.IBCQueryKeeper = ibcquerykeeper.NewKeeper(appCodec, keys[ibcquerytypes.StoreKey])
+	app.IBCQueryKeeper = ibcquerykeeper.NewKeeper(appCodec,
+		keys[ibcquerytypes.StoreKey], app.ScopedIBCKeeper,
+		app.IBCFeeKeeper, app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper)
 
 	// Create IBC Router
 	ibcRouter := porttypes.NewRouter()

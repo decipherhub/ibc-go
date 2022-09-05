@@ -14,17 +14,29 @@ import (
 
 // Keeper define 31-ibc-query keeper
 type Keeper struct {
-	storeKey       sdk.StoreKey
-	cdc            codec.BinaryCodec
-	scopedKeeper   capabilitykeeper.ScopedKeeper
+	storeKey     sdk.StoreKey
+	cdc          codec.BinaryCodec
+	scopedKeeper capabilitykeeper.ScopedKeeper
+
+	ics4Wrapper   types.ICS4Wrapper
+	channelKeeper types.ChannelKeeper
+	portKeeper    types.PortKeeper
 }
 
 // NewKeeper creates a new 31-ibc-query Keeper instance
-func NewKeeper(cdc codec.BinaryCodec, key sdk.StoreKey, scopedKeeper capabilitykeeper.ScopedKeeper) Keeper {
+func NewKeeper(cdc codec.BinaryCodec,
+	key sdk.StoreKey,
+	scopedKeeper capabilitykeeper.ScopedKeeper,
+	ics4Wrapper types.ICS4Wrapper,
+	channelKeeper types.ChannelKeeper,
+	portKeeper types.PortKeeper) Keeper {
 	return Keeper{
-		cdc:      cdc,
-		storeKey: key,
+		cdc:           cdc,
+		storeKey:      key,
 		scopedKeeper:  scopedKeeper,
+		ics4Wrapper:   ics4Wrapper,
+		channelKeeper: channelKeeper,
+		portKeeper:    portKeeper,
 	}
 }
 
@@ -33,7 +45,7 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+host.ModuleName+"-"+types.ModuleName)
 }
 
-func (k Keeper) GenerateQueryIdentifier(ctx sdk.Context) (string, error){
+func (k Keeper) GenerateQueryIdentifier(ctx sdk.Context) (string, error) {
 	nextQuerySeq := k.GetNextQuerySequence(ctx)
 	if nextQuerySeq == 0 {
 		return "", fmt.Errorf("next query sequence is nil")
@@ -64,7 +76,7 @@ func (k Keeper) SetNextQuerySequence(ctx sdk.Context, sequence uint64) {
 // SetSubmitCrossChainQuery stores the MsgSubmitCrossChainQuery in state keyed by the query id
 func (k Keeper) SetSubmitCrossChainQuery(ctx sdk.Context, query types.MsgSubmitCrossChainQuery) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.QueryKey)
-    bz := k.MustMarshalQuery(&query)
+	bz := k.MustMarshalQuery(&query)
 	store.Set(host.QueryKey(query.Id), bz)
 }
 
@@ -102,14 +114,10 @@ func (k Keeper) DeleteSubmitCrossChainQuery(ctx sdk.Context, queryId string) {
 	store.Delete(host.QueryKey(queryId))
 }
 
-
-
-
 // TODO
 // func handleIbcQueryResult
 // 1. relayer should be call this func with query result
 // 2. save query in private store
-
 
 // SetCrossChainQueryResult stores the CrossChainQueryResult in state keyed by the query id
 func (k Keeper) SetSubmitCrossChainQueryResult(ctx sdk.Context, result types.MsgSubmitCrossChainQueryResult) {
@@ -152,9 +160,6 @@ func (k Keeper) DeleteSubmitCrossChainQueryResult(ctx sdk.Context, queryId strin
 	store.Delete(host.QueryResultKey(queryId))
 }
 
-
-
-
 // MustMarshalQuery attempts to encode a CrossChainQuery object and returns the
 // raw encoded bytes. It panics on error.
 func (k Keeper) MustMarshalQuery(query *types.MsgSubmitCrossChainQuery) []byte {
@@ -182,6 +187,3 @@ func (k Keeper) MustUnmarshalQueryResult(bz []byte) types.MsgSubmitCrossChainQue
 	k.cdc.MustUnmarshal(bz, &result)
 	return result
 }
-
-
-
