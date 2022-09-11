@@ -1,6 +1,6 @@
 /*
-	This file contains the variables, constants, and default values
-	used in the testing package and commonly defined in tests.
+This file contains the variables, constants, and default values
+used in the testing package and commonly defined in tests.
 */
 package ibctesting
 
@@ -9,6 +9,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	ibcquerytypes "github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
 	connectiontypes "github.com/cosmos/ibc-go/v4/modules/core/03-connection/types"
 	commitmenttypes "github.com/cosmos/ibc-go/v4/modules/core/23-commitment/types"
@@ -33,6 +34,7 @@ const (
 
 	// Application Ports
 	TransferPort = ibctransfertypes.ModuleName
+	QueryPort    = ibcquerytypes.ModuleName
 	MockPort     = mock.ModuleName
 	MockFeePort  = simapp.MockFeePort
 

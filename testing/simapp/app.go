@@ -294,6 +294,7 @@ func NewSimApp(
 	// add capability keeper and ScopeToModule for ibc module
 	app.CapabilityKeeper = capabilitykeeper.NewKeeper(appCodec, keys[capabilitytypes.StoreKey], memKeys[capabilitytypes.MemStoreKey])
 	scopedIBCKeeper := app.CapabilityKeeper.ScopeToModule(ibchost.ModuleName)
+	scopedIBCQueryKeeper := app.CapabilityKeeper.ScopeToModule(ibcquerytypes.ModuleName)
 	scopedTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
 	scopedICAControllerKeeper := app.CapabilityKeeper.ScopeToModule(icacontrollertypes.SubModuleName)
 	scopedICAHostKeeper := app.CapabilityKeeper.ScopeToModule(icahosttypes.SubModuleName)
@@ -387,7 +388,7 @@ func NewSimApp(
 
 	// IBC Query keeper
 	app.IBCQueryKeeper = ibcquerykeeper.NewKeeper(appCodec,
-		keys[ibcquerytypes.StoreKey], app.ScopedIBCKeeper,
+		keys[ibcquerytypes.StoreKey], scopedIBCQueryKeeper,
 		app.IBCFeeKeeper, app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper)
 
 	// Create IBC Router
@@ -433,6 +434,14 @@ func NewSimApp(
 
 	// Add transfer stack to IBC Router
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferStack)
+
+
+	var ibcQueryStack porttypes.IBCModule
+	ibcQueryStack = ibcquery.NewIBCModule(app.IBCQueryKeeper)
+	ibcQueryStack = ibcfee.NewIBCMiddleware(ibcQueryStack, app.IBCFeeKeeper)
+
+	// Add transfer stack to IBC Router
+	ibcRouter.AddRoute(ibcquerytypes.ModuleName, ibcQueryStack)
 
 	// Create Interchain Accounts Stack
 	// SendPacket, since it is originating from the application to core IBC:

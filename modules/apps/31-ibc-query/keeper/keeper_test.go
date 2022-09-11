@@ -1,9 +1,11 @@
 package keeper_test
 
 import (
+	"testing"
+
+	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
 	ibctesting "github.com/cosmos/ibc-go/v4/testing"
 	"github.com/stretchr/testify/suite"
-	"testing"
 )
 
 type KeeperTestSuite struct {
@@ -22,6 +24,16 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.chainA = suite.coordinator.GetChain(ibctesting.GetChainID(1))
 	suite.chainB = suite.coordinator.GetChain(ibctesting.GetChainID(2))
 	suite.chainC = suite.coordinator.GetChain(ibctesting.GetChainID(3))
+}
+
+func NewQueryrPath(chainA, chainB *ibctesting.TestChain) *ibctesting.Path {
+	path := ibctesting.NewPath(chainA, chainB)
+	path.EndpointA.ChannelConfig.PortID = ibctesting.QueryPort
+	path.EndpointB.ChannelConfig.PortID = ibctesting.QueryPort
+	path.EndpointA.ChannelConfig.Version = types.Version
+	path.EndpointB.ChannelConfig.Version = types.Version
+
+	return path
 }
 
 func TestKeeperTestSuite(t *testing.T) {

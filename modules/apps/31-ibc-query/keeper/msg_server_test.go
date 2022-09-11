@@ -4,16 +4,24 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
 	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
+	ibctesting "github.com/cosmos/ibc-go/v4/testing"
 )
 
+const (
+	portid   = "testportid"
+	chanid   = "channel-0"
+)
 
 var (
-	timeoutHeight        = clienttypes.NewHeight(0, 100)
-	timeoutTimestamp     = uint64(0)
+	timeoutHeight     = clienttypes.NewHeight(0, 100)
+	timeoutTimestamp  = uint64(0)
+	addr              = sdk.AccAddress("testaddr111111111111").String()
+	queryHeight       = clienttypes.NewHeight(0, 1)
 )
 
 func (suite *KeeperTestSuite) TestSubmitCrossChainQuery() {
 	var (
+		path             *ibctesting.Path
 		msg    *types.MsgSubmitCrossChainQuery
 	)
 
@@ -25,19 +33,23 @@ func (suite *KeeperTestSuite) TestSubmitCrossChainQuery() {
 		{
 			"success",
 			true,
-			func() {
-				msg = types.NewMsgSubmitCrossChainQuery("query-1", "test/query_path", timeoutHeight.RevisionHeight, timeoutTimestamp, 12, "client-1", "cosmos1234565")
+			func() {				
+				suite.coordinator.CreateChannels(path)
+				msg = types.NewMsgSubmitCrossChainQuery("query-1", "test/query_path", timeoutHeight, timeoutTimestamp, queryHeight.RevisionHeight, addr, path.EndpointA.ChannelConfig.PortID, path.EndpointA.ChannelID)
 			},
 		},
 	}
 
 	for _, tc := range testCases {
 		suite.SetupTest()
+		path = NewQueryrPath(suite.chainA, suite.chainB)
+		suite.coordinator.SetupConnections(path)
 
 		tc.malleate()
-		res, err := suite.chainA.GetSimApp().IBCQueryKeeper.SubmitCrossChainQuery(sdk.WrapSDKContext(suite.chainA.GetContext()), msg)
-
+		
 		if tc.expPass {
+			res, err := suite.chainA.GetSimApp().IBCQueryKeeper.SubmitCrossChainQuery(sdk.WrapSDKContext(suite.chainA.GetContext()), msg)
+
 			suite.Require().NoError(err)
 			suite.Require().NotNil(res)
 			queryResult, found := suite.chainA.GetSimApp().IBCQueryKeeper.GetSubmitCrossChainQuery(suite.chainA.GetContext(), "query-1")
@@ -45,13 +57,11 @@ func (suite *KeeperTestSuite) TestSubmitCrossChainQuery() {
 			suite.Require().True(found)
 			suite.Require().Equal("query-1", queryResult.Id)
 			suite.Require().Equal("test/query_path", queryResult.Path)
-			suite.Require().Equal(timeoutHeight.RevisionHeight, queryResult.LocalTimeoutHeight)
+			suite.Require().Equal(timeoutHeight.RevisionHeight, queryResult.LocalTimeoutHeight.RevisionHeight)
 			suite.Require().Equal(timeoutTimestamp, queryResult.LocalTimeoutStamp)
-			suite.Require().Equal(uint64(0xc), queryResult.QueryHeight)
-			suite.Require().Equal("client-1", queryResult.ClientId)
-			suite.Require().Equal("cosmos1234565", queryResult.Sender)
-		} else {
-			suite.Require().Error(err)
+			suite.Require().Equal(queryHeight.RevisionHeight, queryResult.QueryHeight)
+			suite.Require().Equal(addr, queryResult.Sender)
+
 		}
 	}
 }
