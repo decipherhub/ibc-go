@@ -6,6 +6,11 @@ const (
 	// ModuleName defines the 31-ibc-query name
 	ModuleName = "queryibc"
 
+	Version = "ics31-1"
+
+	// PortID is the default port id that IBC query module binds to
+	PortID = "queryibc"
+
 	// StoreKey is the store key string for IBC query module
 	StoreKey = ModuleName
 
@@ -20,6 +25,8 @@ const (
 )
 
 var (
+	// PortKey defines the key to store the port ID in store
+	PortKey = []byte{0x01}
 	// QueryKey defines the key to store the query in store
 	QueryKey = []byte{0x01}
 	// QueryResultKey defines the key to store query result in store
