@@ -2,6 +2,7 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
 )
 
 const (
@@ -10,40 +11,40 @@ const (
 )
 
 // NewMsgSubmitCrossChainQuery creates a new instance of NewMsgSubmitCrossChainQuery
-func NewMsgSubmitCrossChainQuery(id string, path string, localTimeoutHeight uint64, localTimeoutStamp uint64, queryHeight uint64, clientId string, creator string) *MsgSubmitCrossChainQuery {
+func NewMsgSubmitCrossChainQuery(id string, path string, localTimeoutHeight clienttypes.Height, localTimeoutStamp uint64, queryHeight uint64, creator string, srcPort string, srcChannel string) *MsgSubmitCrossChainQuery {
 	return &MsgSubmitCrossChainQuery{
 		Id:                 id,
 		Path:               path,
 		LocalTimeoutHeight: localTimeoutHeight,
 		LocalTimeoutStamp:  localTimeoutStamp,
 		QueryHeight:        queryHeight,
-		ClientId:           clientId,
 		Sender:             creator,
+		SourcePort:         srcPort,
+		SourceChannel:      srcChannel,
 	}
 }
 
-func (q MsgSubmitCrossChainQuery) GetQueryId() string { return q.Id }
+func (msg MsgSubmitCrossChainQuery) GetQueryId() string { return msg.Id }
 
-func (q MsgSubmitCrossChainQuery) GetPath() string { return q.Path }
+func (msg MsgSubmitCrossChainQuery) GetPath() string { return msg.Path }
 
-func (q MsgSubmitCrossChainQuery) GetTimeoutHeight() uint64 { return q.LocalTimeoutHeight }
+func (msg MsgSubmitCrossChainQuery) GetTimeoutHeight() clienttypes.Height { return msg.LocalTimeoutHeight }
 
-func (q MsgSubmitCrossChainQuery) GetTimeoutTimestamp() uint64 { return q.LocalTimeoutStamp }
+func (msg MsgSubmitCrossChainQuery) GetTimeoutTimestamp() uint64 { return msg.LocalTimeoutStamp }
 
-func (q MsgSubmitCrossChainQuery) GetQueryHeight() uint64 { return q.QueryHeight }
+func (msg MsgSubmitCrossChainQuery) GetQueryHeight() uint64 { return msg.QueryHeight }
 
-func (q MsgSubmitCrossChainQuery) GetClientID() string { return q.ClientId }
 
 
 // ValidateBasic implements sdk.Msg and performs basic stateless validation
-func (q MsgSubmitCrossChainQuery) ValidateBasic() error {
+func (msg MsgSubmitCrossChainQuery) ValidateBasic() error {
 
 	return nil
 }
 
 // GetSigners implements sdk.Msg
-func (q MsgSubmitCrossChainQuery) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(q.Sender)
+func (msg MsgSubmitCrossChainQuery) GetSigners() []sdk.AccAddress {
+	signer, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
 	}
@@ -52,18 +53,18 @@ func (q MsgSubmitCrossChainQuery) GetSigners() []sdk.AccAddress {
 }
 
 // Route implements sdk.Msg
-func (q MsgSubmitCrossChainQuery) Route() string {
+func (msg MsgSubmitCrossChainQuery) Route() string {
 	return RouterKey
 }
 
 // Type implements sdk.Msg
-func (q MsgSubmitCrossChainQuery) Type() string {
+func (msg MsgSubmitCrossChainQuery) Type() string {
 	return TypeMsgSubmitCrossChainQuery
 }
 
 // GetSignBytes implements sdk.Msg.
-func (q MsgSubmitCrossChainQuery) GetSignBytes() []byte {
-	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(&q))
+func (msg MsgSubmitCrossChainQuery) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(&msg))
 }
 
 // NewMsgSubmitCrossChainQueryResult creates a new instance of MsgSubmitCrossChainQueryResult
@@ -76,13 +77,13 @@ func NewMsgSubmitCrossChainQueryResult(id string, result QueryResult, data []byt
 }
 
 // ValidateBasic implements sdk.Msg and performs basic stateless validation
-func (q MsgSubmitCrossChainQueryResult) ValidateBasic() error {
+func (msg MsgSubmitCrossChainQueryResult) ValidateBasic() error {
 	return nil
 }
 
 // GetSigners implements sdk.Msg
-func (q MsgSubmitCrossChainQueryResult) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(q.Relayer)
+func (msg MsgSubmitCrossChainQueryResult) GetSigners() []sdk.AccAddress {
+	signer, err := sdk.AccAddressFromBech32(msg.Relayer)
 	if err != nil {
 		panic(err)
 	}
@@ -91,16 +92,16 @@ func (q MsgSubmitCrossChainQueryResult) GetSigners() []sdk.AccAddress {
 }
 
 // Route implements sdk.Msg
-func (q MsgSubmitCrossChainQueryResult) Route() string {
+func (msg MsgSubmitCrossChainQueryResult) Route() string {
 	return RouterKey
 }
 
 // Type implements sdk.Msg
-func (q MsgSubmitCrossChainQueryResult) Type() string {
+func (msg MsgSubmitCrossChainQueryResult) Type() string {
 	return TypeMsgSubmitCrossChainQueryResult
 }
 
 // GetSignBytes implements sdk.Msg.
-func (q MsgSubmitCrossChainQueryResult) GetSignBytes() []byte {
-	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(&q))
+func (msg MsgSubmitCrossChainQueryResult) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(&msg))
 }
