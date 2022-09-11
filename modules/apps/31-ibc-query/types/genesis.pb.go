@@ -61,8 +61,9 @@ func (QueryResult) EnumDescriptor() ([]byte, []int) {
 
 // GenesisState defines the ICS31 ibc-query genesis state
 type GenesisState struct {
-	Queries []*CrossChainQuery       `protobuf:"bytes,1,rep,name=queries,proto3" json:"queries,omitempty"`
-	Results []*CrossChainQueryResult `protobuf:"bytes,2,rep,name=results,proto3" json:"results,omitempty"`
+	Queries []*MsgSubmitCrossChainQuery       `protobuf:"bytes,1,rep,name=queries,proto3" json:"queries,omitempty"`
+	Results []*MsgSubmitCrossChainQueryResult `protobuf:"bytes,2,rep,name=results,proto3" json:"results,omitempty"`
+	PortId  string                            `protobuf:"bytes,3,opt,name=port_id,json=portId,proto3" json:"port_id,omitempty" yaml:"port_id"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }
@@ -98,14 +99,21 @@ func (m *GenesisState) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GenesisState proto.InternalMessageInfo
 
-func (m *GenesisState) GetQueries() []*CrossChainQuery {
+func (m *GenesisState) GetPortId() string {
+	if m != nil {
+		return m.PortId
+	}
+	return ""
+}
+
+func (m *GenesisState) GetQueries() []*MsgSubmitCrossChainQuery {
 	if m != nil {
 		return m.Queries
 	}
 	return nil
 }
 
-func (m *GenesisState) GetResults() []*CrossChainQueryResult {
+func (m *GenesisState) GetResults() []*MsgSubmitCrossChainQueryResult {
 	if m != nil {
 		return m.Results
 	}
@@ -353,6 +361,13 @@ func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0xa
 		}
 	}
+	if len(m.PortId) > 0 {
+		i -= len(m.PortId)
+		copy(dAtA[i:], m.PortId)
+		i = encodeVarintGenesis(dAtA, i, uint64(len(m.PortId)))
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -481,6 +496,10 @@ func (m *GenesisState) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = len(m.PortId)
+	if l > 0 {
+		n += 1 + l + sovGenesis(uint64(l))
+	}
 	if len(m.Queries) > 0 {
 		for _, e := range m.Queries {
 			l = e.Size()
@@ -611,7 +630,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Queries = append(m.Queries, &CrossChainQuery{})
+			m.Queries = append(m.Queries, &MsgSubmitCrossChainQuery{})
 			if err := m.Queries[len(m.Queries)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -645,10 +664,42 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Results = append(m.Results, &CrossChainQueryResult{})
+			m.Results = append(m.Results, &MsgSubmitCrossChainQueryResult{})
 			if err := m.Results[len(m.Results)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PortId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenesis
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PortId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

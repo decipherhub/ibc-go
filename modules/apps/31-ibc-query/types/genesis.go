@@ -5,6 +5,7 @@ func NewGenesisState(queries []*MsgSubmitCrossChainQuery, results []*MsgSubmitCr
 	return &GenesisState{
 		Queries: queries,
 		Results: results,
+		PortId:      PortID,
 	}
 }
 
@@ -13,6 +14,7 @@ func DefaultGenesisState() *GenesisState {
 	return &GenesisState{
 		Queries: []*MsgSubmitCrossChainQuery{},
 		Results: []*MsgSubmitCrossChainQueryResult{},
+		PortId:      PortID,
 	}
 }
 

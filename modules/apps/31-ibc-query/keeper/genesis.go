@@ -1,17 +1,27 @@
 package keeper
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
 )
 
 // InitGenesis initializes the application state from a provided genesis state
 func (k Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
+	k.SetPort(ctx, state.PortId)
 	for _, query := range state.Queries {
 		k.SetSubmitCrossChainQuery(ctx, *query)
 	}
 	for _, result := range state.Results {
 		k.SetSubmitCrossChainQueryResult(ctx, *result)
+	}
+
+  	if !k.IsBound(ctx, state.PortId) {
+		err := k.BindPort(ctx, state.PortId)
+		if err != nil { 
+			panic(fmt.Sprintf("could not claim port capability: %v", err))
+		}
 	}
 }
 
