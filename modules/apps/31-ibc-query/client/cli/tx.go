@@ -22,7 +22,7 @@ const (
 
 func NewMsgCrossChainQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "cross-chain-query [client-id] [query-path] [query-height]",
+		Use:     "cross-chain-query [src-port] [src-channel] [query-path] [query-height]",
 		Short:   "Request ibc query on a given channel.",
 		Long:    strings.TrimSpace(`Register a payee address on a given channel.`),
 		Args:    cobra.ExactArgs(3),
@@ -38,8 +38,9 @@ func NewMsgCrossChainQueryCmd() *cobra.Command {
 				return err
 			}
 
-			clientId := args[0]
-			path := args[1]
+			srcPort := args[0]
+			srcChannel := args[1]
+			path := args[2]
 			queryHeight, _ :=  strconv.ParseUint(args[2],10, 64)
 			
 
@@ -57,7 +58,7 @@ func NewMsgCrossChainQueryCmd() *cobra.Command {
 				return err
 			}
 			
-			msg := types.NewMsgSubmitCrossChainQuery(queryId, path, timeoutHeight.RevisionHeight, timeoutTimestamp, queryHeight, clientId, creator)
+			msg := types.NewMsgSubmitCrossChainQuery(queryId, path, timeoutHeight, timeoutTimestamp, queryHeight, creator, srcPort, srcChannel)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

@@ -33,10 +33,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type MsgSubmitCrossChainQuery struct {
 	Id                 string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Path               string        `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-	LocalTimeoutHeight *types.Height `protobuf:"bytes,3,opt,name=local_timeout_height,json=localTimeoutHeight,proto3" json:"local_timeout_height,omitempty"`
+	LocalTimeoutHeight types.Height `protobuf:"bytes,3,opt,name=local_timeout_height,json=localTimeoutHeight,proto3" json:"local_timeout_height,omitempty"`
 	LocalTimeoutStamp  uint64        `protobuf:"varint,4,opt,name=local_timeout_stamp,json=localTimeoutStamp,proto3" json:"local_timeout_stamp,omitempty"`
 	QueryHeight        uint64        `protobuf:"varint,5,opt,name=query_height,json=queryHeight,proto3" json:"query_height,omitempty"`
-	ClientId           string        `protobuf:"bytes,6,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
 	// sender address
 	Sender        string `protobuf:"bytes,7,opt,name=sender,proto3" json:"sender,omitempty"`
 	SourcePort    string `protobuf:"bytes,8,opt,name=source_port,json=sourcePort,proto3" json:"source_port,omitempty"`
@@ -423,13 +422,6 @@ func (m *MsgSubmitCrossChainQuery) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i--
 		dAtA[i] = 0x3a
 	}
-	if len(m.ClientId) > 0 {
-		i -= len(m.ClientId)
-		copy(dAtA[i:], m.ClientId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ClientId)))
-		i--
-		dAtA[i] = 0x32
-	}
 	if m.QueryHeight != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.QueryHeight))
 		i--
@@ -440,18 +432,16 @@ func (m *MsgSubmitCrossChainQuery) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i--
 		dAtA[i] = 0x20
 	}
-	if m.LocalTimeoutHeight != nil {
-		{
-			size, err := m.LocalTimeoutHeight.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTx(dAtA, i, uint64(size))
+	{
+		size, err := m.LocalTimeoutHeight.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x1a
 	if len(m.Path) > 0 {
 		i -= len(m.Path)
 		copy(dAtA[i:], m.Path)
@@ -601,19 +591,13 @@ func (m *MsgSubmitCrossChainQuery) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	if m.LocalTimeoutHeight != nil {
-		l = m.LocalTimeoutHeight.Size()
-		n += 1 + l + sovTx(uint64(l))
-	}
+	l = m.LocalTimeoutHeight.Size()
+	n += 1 + l + sovTx(uint64(l))
 	if m.LocalTimeoutStamp != 0 {
 		n += 1 + sovTx(uint64(m.LocalTimeoutStamp))
 	}
 	if m.QueryHeight != 0 {
 		n += 1 + sovTx(uint64(m.QueryHeight))
-	}
-	l = len(m.ClientId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
 	}
 	l = len(m.Sender)
 	if l > 0 {
@@ -807,9 +791,6 @@ func (m *MsgSubmitCrossChainQuery) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.LocalTimeoutHeight == nil {
-				m.LocalTimeoutHeight = &types.Height{}
-			}
 			if err := m.LocalTimeoutHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -882,7 +863,6 @@ func (m *MsgSubmitCrossChainQuery) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ClientId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
