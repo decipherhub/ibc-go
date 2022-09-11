@@ -42,28 +42,22 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 		LocalTimeoutHeight: msg.LocalTimeoutHeight,
 		LocalTimeoutStamp:  msg.LocalTimeoutStamp,
 		QueryHeight:        msg.QueryHeight,
-		ClientId:           msg.ClientId,
 		Sender:             msg.Sender,
 	}
 
 	k.SetSubmitCrossChainQuery(ctx, query)
 
-	var data []byte
-	err := query.Unmarshal(data)
-	if err != nil {
-		return nil, err
-	}
-	if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, data,
-		*msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
-		return nil, err
-	}
-
-	//TODO
-	// Add Capability Key
-	// capKey, err := k.scopedKeeper.NewCapability(ctx,msg.Id)
+	// TODO 
+	// var data []byte
+	// err := query.Unmarshal(data)
 	// if err != nil {
-	// 	return nil, sdkerrors.Wrapf(err, "could not create query capability for query ID %s ", msg.Id)
+	// 	return nil, err
 	// }
+	
+	if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, query.GetSignBytes(),
+		msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
+		return nil, err
+	}
 
 	// Log the query request
 	k.Logger(ctx).Info("query sent", "query_id", msg.GetQueryId())
