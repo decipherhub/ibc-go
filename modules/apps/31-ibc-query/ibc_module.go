@@ -1,7 +1,6 @@
 package ibc_query
 
 import (
-	"math"
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -28,29 +27,16 @@ func NewIBCModule(k keeper.Keeper) IBCModule {
 	}
 }
 
-// ValidateTransferChannelParams does validation of a newly created transfer channel. A transfer
-// channel must be UNORDERED, use the correct port (by default 'transfer'), and use the current
+// ValidateIBCQuerChannelParams does validation of a newly created IBC query channel.use the correct port (by default 'ibcquery'), and use the current
 // supported version. Only 2^32 channels are allowed to be created.
-func ValidateTransferChannelParams(
+func ValidateIBCQueryChannelParams(
 	ctx sdk.Context,
 	keeper keeper.Keeper,
 	order channeltypes.Order,
 	portID string,
 	channelID string,
 ) error {
-	// NOTE: for escrow address security only 2^32 channels are allowed to be created
-	// Issue: https://github.com/cosmos/cosmos-sdk/issues/7737
-	channelSequence, err := channeltypes.ParseChannelSequence(channelID)
-	if err != nil {
-		return err
-	}
-	if channelSequence > uint64(math.MaxUint32) {
-		return sdkerrors.Wrapf(types.ErrMaxTransferChannels, "channel sequence %d is greater than max allowed transfer channels %d", channelSequence, uint64(math.MaxUint32))
-	}
-	if order != channeltypes.UNORDERED {
-		return sdkerrors.Wrapf(channeltypes.ErrInvalidChannelOrdering, "expected %s channel, got %s ", channeltypes.UNORDERED, order)
-	}
-
+	
 	// Require portID is the portID transfer module is bound to
 	boundPort := keeper.GetPort(ctx)
 	if boundPort != portID {
@@ -71,7 +57,7 @@ func (im IBCModule) OnChanOpenInit(
 	counterparty channeltypes.Counterparty,
 	version string,
 ) (string, error) {
-	if err := ValidateTransferChannelParams(ctx, im.keeper, order, portID, channelID); err != nil {
+	if err := ValidateIBCQueryChannelParams(ctx, im.keeper, order, portID, channelID); err != nil {
 		return "", err
 	}
 
@@ -102,7 +88,7 @@ func (im IBCModule) OnChanOpenTry(
 	counterparty channeltypes.Counterparty,
 	counterpartyVersion string,
 ) (string, error) {
-	if err := ValidateTransferChannelParams(ctx, im.keeper, order, portID, channelID); err != nil {
+	if err := ValidateIBCQueryChannelParams(ctx, im.keeper, order, portID, channelID); err != nil {
 		return "", err
 	}
 

@@ -4,12 +4,12 @@ import fmt "fmt"
 
 const (
 	// ModuleName defines the 31-ibc-query name
-	ModuleName = "queryibc"
+	ModuleName = "ibcquery"
 
 	Version = "ics31-1"
 
 	// PortID is the default port id that IBC query module binds to
-	PortID = "queryibc"
+	PortID = "ibcquery"
 
 	// StoreKey is the store key string for IBC query module
 	StoreKey = ModuleName
