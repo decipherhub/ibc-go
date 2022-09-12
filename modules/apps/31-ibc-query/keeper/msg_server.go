@@ -67,27 +67,3 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 
 	return &types.MsgSubmitCrossChainQueryResponse{QueryId: query.Id}, nil
 }
-
-// SubmitCrossChainQueryResult Handling SubmitCrossChainQueryResult transaction
-func (k Keeper) SubmitCrossChainQueryResult(goCtx context.Context, msg *types.MsgSubmitCrossChainQueryResult) (*types.MsgSubmitCrossChainQueryResultResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	// check CrossChainQuery exist
-	if _, found := k.GetCrossChainQuery(ctx, msg.Id); !found {
-		return nil, types.ErrCrossChainQueryNotFound
-	}
-
-	// remove query from privateStore
-	k.DeleteCrossChainQuery(ctx, msg.Id)
-
-	queryResult := types.CrossChainQueryResult{
-		Id:     msg.Id,
-		Result: msg.Result,
-		Data:   msg.Data,
-	}
-
-	// store result in privateStore
-	k.SetCrossChainQueryResult(ctx, queryResult)
-
-	return &types.MsgSubmitCrossChainQueryResultResponse{}, nil
-}
