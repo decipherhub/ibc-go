@@ -2,50 +2,70 @@ package keeper
 
 import (
 	"context"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
+	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
 )
 
-var _ types.MsgServer = Keeper{}
+//var _ types.MsgServer = Keeper{}
 
 // SubmitCrossChainQuery Handling SubmitCrossChainQuery transaction
 func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmitCrossChainQuery) (*types.MsgSubmitCrossChainQueryResponse, error) {
-	// TODO
-	// 1. UnwrapSDKContext
-	// 2. call keeper function
-	//   2.1 keeper func transforms msg to query
-	//   2.2 keeper func save query in private store
-	// 3. emit event or implement emit event function in event.go
-
+	// UnwrapSDKContext
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	crossChainQueryMsg := &types.CrossChainQuery{
-		Id:                    msg.Id,
-		Path:                  msg.Path,
-		LocalTimeoutHeight:    msg.LocalTimeoutHeight,
-		LocalTimeoutTimestamp: msg.LocalTimeoutStamp,
-		QueryHeight:           msg.QueryHeight,
-		ClientId:              msg.ClientId,
-	}
-	k.SetCrossChainQuery(ctx, crossChainQueryMsg)
 
-	var data []byte
-	err := crossChainQueryMsg.Unmarshal(data)
-	if err != nil {
+	currentTimestamp := uint64(ctx.BlockTime().UnixNano())
+	currentHeight := clienttypes.GetSelfHeight(ctx)
+
+	// Sanity-check that localTimeoutHeight is 0 or greater than the current height, otherwise the query will always time out.
+	if !(msg.LocalTimeoutHeight.RevisionHeight == 0 || msg.LocalTimeoutHeight.RevisionHeight > currentHeight.RevisionHeight) {
+		return nil, sdkerrors.Wrapf(
+			types.ErrInvalidTimeoutHeight,
+			"localTimeoutHeight is not 0 and current height >= localTimeoutHeight(%d >= %d)", currentHeight.RevisionHeight, msg.LocalTimeoutHeight,
+		)
+	}
+	// Sanity-check that localTimeoutTimestamp is 0 or greater than the current timestamp, otherwise the query will always time out.
+	if !(msg.LocalTimeoutStamp == 0 || msg.LocalTimeoutStamp > currentTimestamp) {
+		return nil, sdkerrors.Wrapf(
+			types.ErrQuerytTimeout,
+			"localTimeoutTimestamp is not 0 and current timestamp >= localTimeoutTimestamp(%d >= %d)", currentTimestamp, msg.LocalTimeoutStamp,
+		)
+	}
+
+	// call keeper function
+	// keeper func save query in private store
+	query := types.MsgSubmitCrossChainQuery{
+		Id:                 msg.Id,
+		Path:               msg.Path,
+		LocalTimeoutHeight: msg.LocalTimeoutHeight,
+		LocalTimeoutStamp:  msg.LocalTimeoutStamp,
+		QueryHeight:        msg.QueryHeight,
+		Sender:             msg.Sender,
+	}
+
+	k.SetSubmitCrossChainQuery(ctx, query)
+
+	// TODO 
+	// var data []byte
+	// err := query.Unmarshal(data)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	
+	if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, query.GetSignBytes(),
+		msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
 		return nil, err
 	}
 
-	if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, data,
-		*msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
-		return nil, err
-	}
+	// Log the query request
+	k.Logger(ctx).Info("query sent", "query_id", msg.GetQueryId())
 
-	if err := ctx.EventManager().EmitTypedEvent(
-		types.NewEventQuerySubmitted(msg.Id, msg.Path, *msg.LocalTimeoutHeight, msg.LocalTimeoutStamp, msg.QueryHeight),
-	); err != nil {
-		return nil, err
-	}
+	// emit event
+	EmitQueryEvent(ctx, msg)
 
-	return &types.MsgSubmitCrossChainQueryResponse{}, nil
+	return &types.MsgSubmitCrossChainQueryResponse{QueryId: query.Id}, nil
 }
 
 // SubmitCrossChainQueryResult Handling SubmitCrossChainQueryResult transaction
@@ -53,21 +73,21 @@ func (k Keeper) SubmitCrossChainQueryResult(goCtx context.Context, msg *types.Ms
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// check CrossChainQuery exist
-	if _, found := k.GetCrossChainQuery(ctx, msg.Id); !found {
+	if _, found := k.GetSubmitCrossChainQuery(ctx, msg.Id); !found {
 		return nil, types.ErrCrossChainQueryNotFound
 	}
 
 	// remove query from privateStore
-	k.DeleteCrossChainQuery(ctx, msg.Id)
+	k.DeleteSubmitCrossChainQuery(ctx, msg.Id)
 
-	queryResult := &types.CrossChainQueryResult{
+	queryResult := types.MsgSubmitCrossChainQueryResult{
 		Id:     msg.Id,
 		Result: msg.Result,
 		Data:   msg.Data,
 	}
 
 	// store result in privateStore
-	k.SetCrossChainQueryResult(ctx, queryResult)
+	k.SetSubmitCrossChainQueryResult(ctx, queryResult)
 
 	return &types.MsgSubmitCrossChainQueryResultResponse{}, nil
 }

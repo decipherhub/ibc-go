@@ -1657,6 +1657,12 @@ MsgSubmitCrossChainQuery
 MsgSubmitCrossChainQueryResponse
 
 
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `query_id` | [string](#string) |  |  |
+| `cap_key` | [uint64](#uint64) |  |  |
+
+
 
 
 
