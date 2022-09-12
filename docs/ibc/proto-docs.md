@@ -1534,6 +1534,7 @@ GenesisState defines the ICS31 ibc-query genesis state
 | ----- | ---- | ----- | ----------- |
 | `queries` | [CrossChainQuery](#ibc.applications.ibc_query.v1.CrossChainQuery) | repeated |  |
 | `results` | [CrossChainQueryResult](#ibc.applications.ibc_query.v1.CrossChainQueryResult) | repeated |  |
+| `port_id` | [string](#string) |  |  |
 
 
 

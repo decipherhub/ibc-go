@@ -48,7 +48,6 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+host.ModuleName+"-"+types.ModuleName)
 }
 
-
 // IsBound checks if the IBC query module is already bound to the desired port
 func (k Keeper) IsBound(ctx sdk.Context, portID string) bool {
 	_, ok := k.scopedKeeper.GetCapability(ctx, host.PortPath(portID))
@@ -103,27 +102,27 @@ func (k Keeper) SetNextQuerySequence(ctx sdk.Context, sequence uint64) {
 }
 
 // SetSubmitCrossChainQuery stores the MsgSubmitCrossChainQuery in state keyed by the query id
-func (k Keeper) SetSubmitCrossChainQuery(ctx sdk.Context, query types.MsgSubmitCrossChainQuery) {
+func (k Keeper) SetCrossChainQuery(ctx sdk.Context, query types.CrossChainQuery) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.QueryKey)
 	bz := k.MustMarshalQuery(&query)
 	store.Set(host.QueryKey(query.Id), bz)
 }
 
 // GetSubmitCrossChainQuery retrieve the MsgSubmitCrossChainQuery stored in state given the query id
-func (k Keeper) GetSubmitCrossChainQuery(ctx sdk.Context, queryId string) (types.MsgSubmitCrossChainQuery, bool) {
+func (k Keeper) GetCrossChainQuery(ctx sdk.Context, queryId string) (types.CrossChainQuery, bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.QueryKey)
 	key := host.QueryKey(queryId)
 	bz := store.Get(key)
 	if bz == nil {
-		return types.MsgSubmitCrossChainQuery{}, false
+		return types.CrossChainQuery{}, false
 	}
 
 	return k.MustUnmarshalQuery(bz), true
 }
 
 // GetAllSubmitCrossChainQueries returns a list of all MsgSubmitCrossChainQueries that are stored in state
-func (k Keeper) GetAllSubmitCrossChainQueries(ctx sdk.Context) []*types.MsgSubmitCrossChainQuery {
-	var crossChainQueries []*types.MsgSubmitCrossChainQuery
+func (k Keeper) GetAllCrossChainQueries(ctx sdk.Context) []*types.CrossChainQuery {
+	var crossChainQueries []*types.CrossChainQuery
 	store := ctx.KVStore(k.storeKey)
 	iterator := sdk.KVStorePrefixIterator(store, types.QueryKey)
 
@@ -138,7 +137,7 @@ func (k Keeper) GetAllSubmitCrossChainQueries(ctx sdk.Context) []*types.MsgSubmi
 }
 
 // DeleteCrossChainQuery deletes MsgSubmitCrossChainQuery associated with the query id
-func (k Keeper) DeleteSubmitCrossChainQuery(ctx sdk.Context, queryId string) {
+func (k Keeper) DeleteCrossChainQuery(ctx sdk.Context, queryId string) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.QueryKey)
 	store.Delete(host.QueryKey(queryId))
 }
@@ -149,27 +148,27 @@ func (k Keeper) DeleteSubmitCrossChainQuery(ctx sdk.Context, queryId string) {
 // 2. save query in private store
 
 // SetCrossChainQueryResult stores the CrossChainQueryResult in state keyed by the query id
-func (k Keeper) SetSubmitCrossChainQueryResult(ctx sdk.Context, result types.MsgSubmitCrossChainQueryResult) {
+func (k Keeper) SetCrossChainQueryResult(ctx sdk.Context, result types.CrossChainQueryResult) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.QueryResultKey)
 	bz := k.MustMarshalQueryResult(&result)
 	store.Set(host.QueryResultKey(result.Id), bz)
 }
 
 // GetCrossChainQueryResult retrieve the CrossChainQueryResult stored in state given the query id
-func (k Keeper) GetCrossChainQueryResult(ctx sdk.Context, queryId string) (types.MsgSubmitCrossChainQueryResult, bool) {
+func (k Keeper) GetCrossChainQueryResult(ctx sdk.Context, queryId string) (types.CrossChainQueryResult, bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.QueryResultKey)
 	key := host.QueryResultKey(queryId)
 	bz := store.Get(key)
 	if bz == nil {
-		return types.MsgSubmitCrossChainQueryResult{}, false
+		return types.CrossChainQueryResult{}, false
 	}
 
 	return k.MustUnmarshalQueryResult(bz), true
 }
 
 // GetAllCrossChainQueryResults returns a list of all CrossChainQueryResults that are stored in state
-func (k Keeper) GetAllSubmitCrossChainQueryResults(ctx sdk.Context) []*types.MsgSubmitCrossChainQueryResult {
-	var crossChainQueryResults []*types.MsgSubmitCrossChainQueryResult
+func (k Keeper) GetAllCrossChainQueryResults(ctx sdk.Context) []*types.CrossChainQueryResult {
+	var crossChainQueryResults []*types.CrossChainQueryResult
 	store := ctx.KVStore(k.storeKey)
 	iterator := sdk.KVStorePrefixIterator(store, types.QueryResultKey)
 
@@ -184,35 +183,35 @@ func (k Keeper) GetAllSubmitCrossChainQueryResults(ctx sdk.Context) []*types.Msg
 }
 
 // DeleteCrossChainQueryResult deletes CrossChainQueryResult associated with the query id
-func (k Keeper) DeleteSubmitCrossChainQueryResult(ctx sdk.Context, queryId string) {
+func (k Keeper) DeleteCrossChainQueryResult(ctx sdk.Context, queryId string) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.QueryResultKey)
 	store.Delete(host.QueryResultKey(queryId))
 }
 
 // MustMarshalQuery attempts to encode a CrossChainQuery object and returns the
 // raw encoded bytes. It panics on error.
-func (k Keeper) MustMarshalQuery(query *types.MsgSubmitCrossChainQuery) []byte {
+func (k Keeper) MustMarshalQuery(query *types.CrossChainQuery) []byte {
 	return k.cdc.MustMarshal(query)
 }
 
 // MustUnmarshalQuery attempts to decode and return a CrossChainQuery object from
 // raw encoded bytes. It panics on error.
-func (k Keeper) MustUnmarshalQuery(bz []byte) types.MsgSubmitCrossChainQuery {
-	var query types.MsgSubmitCrossChainQuery
+func (k Keeper) MustUnmarshalQuery(bz []byte) types.CrossChainQuery {
+	var query types.CrossChainQuery
 	k.cdc.MustUnmarshal(bz, &query)
 	return query
 }
 
 // MustMarshalQuery attempts to encode a CrossChainQuery object and returns the
 // raw encoded bytes. It panics on error.
-func (k Keeper) MustMarshalQueryResult(result *types.MsgSubmitCrossChainQueryResult) []byte {
+func (k Keeper) MustMarshalQueryResult(result *types.CrossChainQueryResult) []byte {
 	return k.cdc.MustMarshal(result)
 }
 
 // MustUnmarshalQuery attempts to decode and return a CrossChainQuery object from
 // raw encoded bytes. It panics on error.
-func (k Keeper) MustUnmarshalQueryResult(bz []byte) types.MsgSubmitCrossChainQueryResult {
-	var result types.MsgSubmitCrossChainQueryResult
+func (k Keeper) MustUnmarshalQueryResult(bz []byte) types.CrossChainQueryResult {
+	var result types.CrossChainQueryResult
 	k.cdc.MustUnmarshal(bz, &result)
 	return result
 }

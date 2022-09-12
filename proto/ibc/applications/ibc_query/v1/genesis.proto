@@ -3,6 +3,7 @@ syntax = "proto3";
 package ibc.applications.ibc_query.v1;
 
 import "ibc/core/client/v1/client.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types";
 
