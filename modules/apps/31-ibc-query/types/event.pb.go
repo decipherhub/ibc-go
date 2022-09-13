@@ -23,6 +23,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// EventQuerySubmitted emitted when process MsgSubmitCrossChainQuery tx
 type EventQuerySubmitted struct {
 	Id                 string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Path               string        `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
