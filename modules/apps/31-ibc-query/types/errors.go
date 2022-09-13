@@ -11,4 +11,5 @@ var (
 	ErrCrossChainQueryNotFound = sdkerrors.Register(ModuleName, 4, "no query found for given query id")
 	ErrQuerytTimeout           = sdkerrors.Register(ModuleName, 5, "query timeout")
 	ErrMaxTransferChannels     = sdkerrors.Register(ModuleName, 6, "max transfer channels")
+	ErrUnknownDataType         = sdkerrors.Register(ModuleName, 7, "unknown data type")
 )
