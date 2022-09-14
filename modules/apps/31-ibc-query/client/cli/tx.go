@@ -22,10 +22,10 @@ const (
 
 func NewMsgCrossChainQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "cross-chain-query [src-port] [src-channel] [query-path] [query-height]",
-		Short:   "Request ibc query on a given channel.",
-		Long:    strings.TrimSpace(`Register a payee address on a given channel.`),
-		Args:    cobra.ExactArgs(3),
+		Use:   "cross-chain-query [src-port] [src-channel] [query-path] [query-height]",
+		Short: "Request ibc query on a given channel.",
+		Long:  strings.TrimSpace(`Register a payee address on a given channel.`),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -41,8 +41,7 @@ func NewMsgCrossChainQueryCmd() *cobra.Command {
 			srcPort := args[0]
 			srcChannel := args[1]
 			path := args[2]
-			queryHeight, _ :=  strconv.ParseUint(args[2],10, 64)
-			
+			queryHeight, _ := strconv.ParseUint(args[2], 10, 64)
 
 			timeoutHeightStr, err := cmd.Flags().GetString(flagPacketTimeoutHeight)
 			if err != nil {
@@ -57,8 +56,8 @@ func NewMsgCrossChainQueryCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			
-			msg := types.NewMsgSubmitCrossChainQuery(queryId, path, timeoutHeight, timeoutTimestamp, queryHeight, creator, srcPort, srcChannel)
+
+			msg := types.NewMsgSubmitCrossChainQuery(queryId, path, &timeoutHeight, timeoutTimestamp, queryHeight, creator, srcPort, srcChannel)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

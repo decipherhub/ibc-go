@@ -11,15 +11,15 @@ import (
 func (k Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 	k.SetPort(ctx, state.PortId)
 	for _, query := range state.Queries {
-		k.SetSubmitCrossChainQuery(ctx, *query)
+		k.SetCrossChainQuery(ctx, *query)
 	}
 	for _, result := range state.Results {
-		k.SetSubmitCrossChainQueryResult(ctx, *result)
+		k.SetCrossChainQueryResult(ctx, *result)
 	}
 
-  	if !k.IsBound(ctx, state.PortId) {
+	if !k.IsBound(ctx, state.PortId) {
 		err := k.BindPort(ctx, state.PortId)
-		if err != nil { 
+		if err != nil {
 			panic(fmt.Sprintf("could not claim port capability: %v", err))
 		}
 	}
@@ -28,7 +28,7 @@ func (k Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 // ExportGenesis returns the application exported genesis
 func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return &types.GenesisState{
-		Queries: k.GetAllSubmitCrossChainQueries(ctx),
-		Results: k.GetAllSubmitCrossChainQueryResults(ctx),
+		Queries: k.GetAllCrossChainQueries(ctx),
+		Results: k.GetAllCrossChainQueryResults(ctx),
 	}
 }

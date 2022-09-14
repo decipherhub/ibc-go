@@ -36,28 +36,28 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 
 	// call keeper function
 	// keeper func save query in private store
-	query := types.MsgSubmitCrossChainQuery{
-		Id:                 msg.Id,
-		Path:               msg.Path,
-		LocalTimeoutHeight: msg.LocalTimeoutHeight,
-		LocalTimeoutStamp:  msg.LocalTimeoutStamp,
-		QueryHeight:        msg.QueryHeight,
-		Sender:             msg.Sender,
+	query := types.CrossChainQuery{
+		Id:                    msg.Id,
+		Path:                  msg.Path,
+		LocalTimeoutHeight:    msg.LocalTimeoutHeight,
+		LocalTimeoutTimestamp: msg.LocalTimeoutStamp,
+		QueryHeight:           msg.QueryHeight,
+		ClientId:              msg.Sender,
 	}
 
-	k.SetSubmitCrossChainQuery(ctx, query)
+	k.SetCrossChainQuery(ctx, query)
 
-	// TODO 
+	// TODO
 	// var data []byte
 	// err := query.Unmarshal(data)
 	// if err != nil {
 	// 	return nil, err
 	// }
-	
-	if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, query.GetSignBytes(),
-		msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
-		return nil, err
-	}
+
+	//if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, query.GetSignBytes(),
+	//	msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
+	//	return nil, err
+	//}
 
 	// Log the query request
 	k.Logger(ctx).Info("query sent", "query_id", msg.GetQueryId())
@@ -65,29 +65,12 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	// emit event
 	EmitQueryEvent(ctx, msg)
 
+	// It can be used when event emit
+	//if err := ctx.EventManager().EmitTypedEvent(
+	//	types.NewEventQuerySubmitted(msg.Id, msg.Path, *msg.LocalTimeoutHeight, msg.LocalTimeoutStamp, msg.QueryHeight),
+	//); err != nil {
+	//	return nil, err
+	//}
+
 	return &types.MsgSubmitCrossChainQueryResponse{QueryId: query.Id}, nil
-}
-
-// SubmitCrossChainQueryResult Handling SubmitCrossChainQueryResult transaction
-func (k Keeper) SubmitCrossChainQueryResult(goCtx context.Context, msg *types.MsgSubmitCrossChainQueryResult) (*types.MsgSubmitCrossChainQueryResultResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	// check CrossChainQuery exist
-	if _, found := k.GetSubmitCrossChainQuery(ctx, msg.Id); !found {
-		return nil, types.ErrCrossChainQueryNotFound
-	}
-
-	// remove query from privateStore
-	k.DeleteSubmitCrossChainQuery(ctx, msg.Id)
-
-	queryResult := types.MsgSubmitCrossChainQueryResult{
-		Id:     msg.Id,
-		Result: msg.Result,
-		Data:   msg.Data,
-	}
-
-	// store result in privateStore
-	k.SetSubmitCrossChainQueryResult(ctx, queryResult)
-
-	return &types.MsgSubmitCrossChainQueryResultResponse{}, nil
 }

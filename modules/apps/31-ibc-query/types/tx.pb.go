@@ -33,9 +33,10 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type MsgSubmitCrossChainQuery struct {
 	Id                 string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Path               string        `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-	LocalTimeoutHeight types.Height `protobuf:"bytes,3,opt,name=local_timeout_height,json=localTimeoutHeight,proto3" json:"local_timeout_height,omitempty"`
+	LocalTimeoutHeight *types.Height `protobuf:"bytes,3,opt,name=local_timeout_height,json=localTimeoutHeight,proto3" json:"local_timeout_height,omitempty"`
 	LocalTimeoutStamp  uint64        `protobuf:"varint,4,opt,name=local_timeout_stamp,json=localTimeoutStamp,proto3" json:"local_timeout_stamp,omitempty"`
 	QueryHeight        uint64        `protobuf:"varint,5,opt,name=query_height,json=queryHeight,proto3" json:"query_height,omitempty"`
+	ClientId           string        `protobuf:"bytes,6,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
 	// sender address
 	Sender        string `protobuf:"bytes,7,opt,name=sender,proto3" json:"sender,omitempty"`
 	SourcePort    string `protobuf:"bytes,8,opt,name=source_port,json=sourcePort,proto3" json:"source_port,omitempty"`
@@ -128,92 +129,9 @@ func (m *MsgSubmitCrossChainQueryResponse) GetCapKey() uint64 {
 	return 0
 }
 
-// MsgSubmitCrossChainQueryResult
-type MsgSubmitCrossChainQueryResult struct {
-	Id     string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Result QueryResult `protobuf:"varint,2,opt,name=result,proto3,enum=ibc.applications.ibc_query.v1.QueryResult" json:"result,omitempty"`
-	Data   []byte      `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
-	// relayer address
-	Relayer string `protobuf:"bytes,4,opt,name=relayer,proto3" json:"relayer,omitempty"`
-}
-
-func (m *MsgSubmitCrossChainQueryResult) Reset()         { *m = MsgSubmitCrossChainQueryResult{} }
-func (m *MsgSubmitCrossChainQueryResult) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitCrossChainQueryResult) ProtoMessage()    {}
-func (*MsgSubmitCrossChainQueryResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5d40a119a77c1eef, []int{2}
-}
-func (m *MsgSubmitCrossChainQueryResult) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgSubmitCrossChainQueryResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgSubmitCrossChainQueryResult.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgSubmitCrossChainQueryResult) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitCrossChainQueryResult.Merge(m, src)
-}
-func (m *MsgSubmitCrossChainQueryResult) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgSubmitCrossChainQueryResult) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitCrossChainQueryResult.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgSubmitCrossChainQueryResult proto.InternalMessageInfo
-
-// MsgSubmitCrossChainQueryResultResponse
-type MsgSubmitCrossChainQueryResultResponse struct {
-}
-
-func (m *MsgSubmitCrossChainQueryResultResponse) Reset() {
-	*m = MsgSubmitCrossChainQueryResultResponse{}
-}
-func (m *MsgSubmitCrossChainQueryResultResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitCrossChainQueryResultResponse) ProtoMessage()    {}
-func (*MsgSubmitCrossChainQueryResultResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5d40a119a77c1eef, []int{3}
-}
-func (m *MsgSubmitCrossChainQueryResultResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgSubmitCrossChainQueryResultResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgSubmitCrossChainQueryResultResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgSubmitCrossChainQueryResultResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitCrossChainQueryResultResponse.Merge(m, src)
-}
-func (m *MsgSubmitCrossChainQueryResultResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgSubmitCrossChainQueryResultResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitCrossChainQueryResultResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgSubmitCrossChainQueryResultResponse proto.InternalMessageInfo
-
 func init() {
 	proto.RegisterType((*MsgSubmitCrossChainQuery)(nil), "ibc.applications.ibc_query.v1.MsgSubmitCrossChainQuery")
 	proto.RegisterType((*MsgSubmitCrossChainQueryResponse)(nil), "ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResponse")
-	proto.RegisterType((*MsgSubmitCrossChainQueryResult)(nil), "ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResult")
-	proto.RegisterType((*MsgSubmitCrossChainQueryResultResponse)(nil), "ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResultResponse")
 }
 
 func init() {
@@ -221,44 +139,38 @@ func init() {
 }
 
 var fileDescriptor_5d40a119a77c1eef = []byte{
-	// 592 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0xdf, 0x8a, 0xd3, 0x4e,
-	0x14, 0x6e, 0xba, 0xfd, 0xf5, 0xcf, 0xec, 0xfe, 0x0a, 0x8e, 0xab, 0xc6, 0x2e, 0xa6, 0xb5, 0xe0,
-	0x52, 0x94, 0x4d, 0x68, 0x57, 0x10, 0x14, 0x11, 0xb6, 0x08, 0x2e, 0xba, 0xa0, 0x59, 0xf5, 0xc2,
-	0x9b, 0x30, 0x99, 0x0c, 0xc9, 0x60, 0x92, 0x89, 0x33, 0x93, 0x62, 0xdf, 0xc0, 0x4b, 0x7d, 0x83,
-	0x05, 0x6f, 0x7d, 0x07, 0x6f, 0xbd, 0xdc, 0x4b, 0x2f, 0xa5, 0x05, 0xf1, 0x31, 0x24, 0x33, 0x69,
-	0xa9, 0xe8, 0x56, 0x58, 0xef, 0x66, 0xbe, 0xf3, 0x7d, 0xdf, 0x39, 0x73, 0xce, 0x70, 0xc0, 0x2e,
-	0xf5, 0xb1, 0x83, 0xb2, 0x2c, 0xa6, 0x18, 0x49, 0xca, 0x52, 0xe1, 0x50, 0x1f, 0x7b, 0x6f, 0x72,
-	0xc2, 0xa7, 0xce, 0x64, 0xe8, 0xc8, 0xb7, 0x76, 0xc6, 0x99, 0x64, 0xf0, 0x1a, 0xf5, 0xb1, 0xbd,
-	0xca, 0xb3, 0x97, 0x3c, 0x7b, 0x32, 0xec, 0x6c, 0x87, 0x2c, 0x64, 0x8a, 0xe9, 0x14, 0x27, 0x2d,
-	0xea, 0xdc, 0x5a, 0x6f, 0x1e, 0x92, 0x94, 0x08, 0x2a, 0x4a, 0x72, 0xb7, 0x20, 0x63, 0xc6, 0x89,
-	0x83, 0x63, 0x4a, 0x52, 0x59, 0x30, 0xf4, 0x49, 0x13, 0xfa, 0xdf, 0xab, 0xc0, 0x3c, 0x12, 0xe1,
-	0x71, 0xee, 0x27, 0x54, 0x8e, 0x39, 0x13, 0x62, 0x1c, 0x21, 0x9a, 0x3e, 0x2b, 0xec, 0x60, 0x1b,
-	0x54, 0x69, 0x60, 0x1a, 0x3d, 0x63, 0xd0, 0x72, 0xab, 0x34, 0x80, 0x10, 0xd4, 0x32, 0x24, 0x23,
-	0xb3, 0xaa, 0x10, 0x75, 0x86, 0x4f, 0xc0, 0x76, 0xcc, 0x30, 0x8a, 0x3d, 0x49, 0x13, 0xc2, 0x72,
-	0xe9, 0x45, 0x84, 0x86, 0x91, 0x34, 0x37, 0x7a, 0xc6, 0x60, 0x73, 0xd4, 0x29, 0x5e, 0x64, 0x17,
-	0x05, 0xd8, 0x65, 0xda, 0xc9, 0xd0, 0x7e, 0xa4, 0x18, 0x2e, 0x54, 0xba, 0xe7, 0x5a, 0xa6, 0x31,
-	0x68, 0x83, 0x8b, 0xbf, 0xba, 0x09, 0x89, 0x92, 0xcc, 0xac, 0xf5, 0x8c, 0x41, 0xcd, 0xbd, 0xb0,
-	0x2a, 0x38, 0x2e, 0x02, 0xf0, 0x3a, 0xd8, 0x52, 0x2f, 0x5f, 0x64, 0xfd, 0x4f, 0x11, 0x37, 0x15,
-	0x56, 0x5a, 0xee, 0x80, 0x96, 0x4e, 0xed, 0xd1, 0xc0, 0xac, 0xab, 0xca, 0x9b, 0x1a, 0x38, 0x0c,
-	0xe0, 0x65, 0x50, 0x17, 0x24, 0x0d, 0x08, 0x37, 0x1b, 0x2a, 0x52, 0xde, 0x60, 0x17, 0x6c, 0x0a,
-	0x96, 0x73, 0x4c, 0xbc, 0x8c, 0x71, 0x69, 0x36, 0x55, 0x10, 0x68, 0xe8, 0x29, 0xe3, 0x12, 0xde,
-	0x00, 0xed, 0x92, 0x80, 0x23, 0x94, 0xa6, 0x24, 0x36, 0x5b, 0x8a, 0xf3, 0xbf, 0x46, 0xc7, 0x1a,
-	0xbc, 0xdb, 0x7c, 0x77, 0xd2, 0xad, 0xfc, 0x38, 0xe9, 0x56, 0xfa, 0x2f, 0x41, 0xef, 0xac, 0x3e,
-	0xbb, 0x44, 0x64, 0x2c, 0x15, 0x04, 0x5e, 0x05, 0x4d, 0xfd, 0x9a, 0x65, 0xd7, 0x1b, 0xea, 0x7e,
-	0x18, 0xc0, 0x2b, 0xa0, 0x81, 0x51, 0xe6, 0xbd, 0x26, 0x53, 0xd5, 0xfd, 0x9a, 0x5b, 0xc7, 0x28,
-	0x7b, 0x4c, 0xa6, 0xfd, 0x4f, 0x06, 0xb0, 0xd6, 0x18, 0xe7, 0xb1, 0xfc, 0x6d, 0x8c, 0x07, 0xa0,
-	0xce, 0x55, 0x44, 0x59, 0xb5, 0x47, 0x37, 0xed, 0xb5, 0xff, 0xd0, 0x5e, 0xf1, 0x72, 0x4b, 0x65,
-	0xf1, 0x15, 0x02, 0x24, 0x91, 0x1a, 0xf3, 0x96, 0xab, 0xce, 0xd0, 0x04, 0x0d, 0x4e, 0x62, 0x34,
-	0x25, 0x5c, 0x0d, 0xac, 0xe5, 0x2e, 0xae, 0x2b, 0x6d, 0x18, 0x80, 0xdd, 0xf5, 0xd5, 0x2e, 0x9a,
-	0x31, 0xfa, 0x5c, 0x05, 0x1b, 0x47, 0x22, 0x84, 0x1f, 0x0c, 0x70, 0xe9, 0xcf, 0xdf, 0xf3, 0xce,
-	0x5f, 0xea, 0x3e, 0x2b, 0x51, 0xe7, 0xc1, 0x39, 0x85, 0xcb, 0x41, 0x7d, 0x34, 0xc0, 0xce, 0xba,
-	0x8e, 0xdf, 0x3f, 0x7f, 0x82, 0x3c, 0x96, 0x9d, 0x87, 0xff, 0x24, 0x5f, 0x54, 0x79, 0xf0, 0xe2,
-	0xcb, 0xcc, 0x32, 0x4e, 0x67, 0x96, 0xf1, 0x6d, 0x66, 0x19, 0xef, 0xe7, 0x56, 0xe5, 0x74, 0x6e,
-	0x55, 0xbe, 0xce, 0xad, 0xca, 0xab, 0x7b, 0x21, 0x95, 0x51, 0xee, 0xdb, 0x98, 0x25, 0x0e, 0x66,
-	0x22, 0x61, 0x6a, 0x89, 0xec, 0x85, 0xcc, 0x99, 0xdc, 0x76, 0x12, 0x16, 0xe4, 0x31, 0x11, 0xc5,
-	0x8e, 0x11, 0xce, 0xfe, 0x70, 0xaf, 0x88, 0xe8, 0xf5, 0x22, 0xa7, 0x19, 0x11, 0x7e, 0x5d, 0x6d,
-	0x8e, 0xfd, 0x9f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xc8, 0xec, 0xfe, 0xe6, 0xe6, 0x04, 0x00, 0x00,
+	// 495 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0xcf, 0x6f, 0xd3, 0x30,
+	0x14, 0x4e, 0xba, 0xd2, 0x1f, 0x2e, 0x4c, 0xc2, 0x0c, 0x08, 0x45, 0xa4, 0x65, 0x12, 0xa8, 0x97,
+	0xd9, 0xea, 0x86, 0x84, 0x04, 0x07, 0x24, 0x7a, 0x61, 0x82, 0x49, 0x90, 0x01, 0x07, 0x2e, 0x51,
+	0xe2, 0x58, 0x89, 0x45, 0x92, 0x67, 0x62, 0xa7, 0xa2, 0xff, 0x01, 0x47, 0x38, 0x72, 0xdb, 0x9f,
+	0xc3, 0x71, 0x47, 0x8e, 0xa8, 0x95, 0x10, 0x7f, 0x06, 0x8a, 0xdd, 0x4d, 0x43, 0xa2, 0x1c, 0xb8,
+	0x3d, 0x7f, 0xef, 0xfb, 0xbe, 0xf7, 0xfc, 0xfc, 0x8c, 0xee, 0x8b, 0x98, 0xd1, 0x48, 0xca, 0x5c,
+	0xb0, 0x48, 0x0b, 0x28, 0x15, 0x15, 0x31, 0x0b, 0x3f, 0xd4, 0xbc, 0x5a, 0xd0, 0xf9, 0x94, 0xea,
+	0x8f, 0x44, 0x56, 0xa0, 0x01, 0xdf, 0x11, 0x31, 0x23, 0x17, 0x79, 0xe4, 0x9c, 0x47, 0xe6, 0xd3,
+	0xe1, 0x4e, 0x0a, 0x29, 0x18, 0x26, 0x6d, 0x22, 0x2b, 0x1a, 0x8e, 0x1a, 0x73, 0x06, 0x15, 0xa7,
+	0x2c, 0x17, 0xbc, 0xd4, 0x8d, 0xa3, 0x8d, 0x2c, 0x61, 0xf7, 0x67, 0x0b, 0x79, 0x47, 0x2a, 0x3d,
+	0xae, 0xe3, 0x42, 0xe8, 0x59, 0x05, 0x4a, 0xcd, 0xb2, 0x48, 0x94, 0xaf, 0x1a, 0x5b, 0xbc, 0x8d,
+	0x5a, 0x22, 0xf1, 0xdc, 0xb1, 0x3b, 0xe9, 0x07, 0x2d, 0x91, 0x60, 0x8c, 0xda, 0x32, 0xd2, 0x99,
+	0xd7, 0x32, 0x88, 0x89, 0xf1, 0x0b, 0xb4, 0x93, 0x03, 0x8b, 0xf2, 0x50, 0x8b, 0x82, 0x43, 0xad,
+	0xc3, 0x8c, 0x8b, 0x34, 0xd3, 0xde, 0xd6, 0xd8, 0x9d, 0x0c, 0xf6, 0x87, 0x4d, 0x93, 0xa4, 0x69,
+	0x80, 0xac, 0xcb, 0xce, 0xa7, 0xe4, 0x99, 0x61, 0x04, 0xd8, 0xe8, 0x5e, 0x5b, 0x99, 0xc5, 0x30,
+	0x41, 0xd7, 0xfe, 0x74, 0x53, 0x3a, 0x2a, 0xa4, 0xd7, 0x1e, 0xbb, 0x93, 0x76, 0x70, 0xf5, 0xa2,
+	0xe0, 0xb8, 0x49, 0xe0, 0xbb, 0xe8, 0xb2, 0x99, 0xc0, 0x59, 0xd5, 0x4b, 0x86, 0x38, 0x30, 0xd8,
+	0xda, 0xf2, 0x36, 0xea, 0xdb, 0xd2, 0xa1, 0x48, 0xbc, 0x8e, 0xe9, 0xbc, 0x67, 0x81, 0xc3, 0x04,
+	0xdf, 0x40, 0x1d, 0xc5, 0xcb, 0x84, 0x57, 0x5e, 0xd7, 0x64, 0xd6, 0x27, 0x3c, 0x42, 0x03, 0x05,
+	0x75, 0xc5, 0x78, 0x28, 0xa1, 0xd2, 0x5e, 0xcf, 0x24, 0x91, 0x85, 0x5e, 0x42, 0xa5, 0xf1, 0x3d,
+	0xb4, 0xbd, 0x26, 0xb0, 0x2c, 0x2a, 0x4b, 0x9e, 0x7b, 0x7d, 0xc3, 0xb9, 0x62, 0xd1, 0x99, 0x05,
+	0x1f, 0xf5, 0x3e, 0x9d, 0x8c, 0x9c, 0x5f, 0x27, 0x23, 0x67, 0xf7, 0x2d, 0x1a, 0x6f, 0x9a, 0x73,
+	0xc0, 0x95, 0x84, 0x52, 0x71, 0x7c, 0x0b, 0xf5, 0xec, 0x6d, 0xce, 0xa7, 0xde, 0x35, 0xe7, 0xc3,
+	0x04, 0xdf, 0x44, 0x5d, 0x16, 0xc9, 0xf0, 0x3d, 0x5f, 0x98, 0xe9, 0xb7, 0x83, 0x0e, 0x8b, 0xe4,
+	0x73, 0xbe, 0xd8, 0xff, 0xea, 0xa2, 0xad, 0x23, 0x95, 0xe2, 0x2f, 0x2e, 0xba, 0xfe, 0xf7, 0x57,
+	0x7c, 0x48, 0xfe, 0xb9, 0x39, 0x64, 0x53, 0x5b, 0xc3, 0x27, 0xff, 0x29, 0x3c, 0xbb, 0xcf, 0xd3,
+	0x37, 0xdf, 0x96, 0xbe, 0x7b, 0xba, 0xf4, 0xdd, 0x1f, 0x4b, 0xdf, 0xfd, 0xbc, 0xf2, 0x9d, 0xd3,
+	0x95, 0xef, 0x7c, 0x5f, 0xf9, 0xce, 0xbb, 0xc7, 0xa9, 0xd0, 0x59, 0x1d, 0x13, 0x06, 0x05, 0x65,
+	0xa0, 0x0a, 0x30, 0x5b, 0xbf, 0x97, 0x02, 0x9d, 0x3f, 0xa0, 0x05, 0x24, 0x75, 0xce, 0x55, 0xf3,
+	0x29, 0x14, 0x3d, 0x98, 0xee, 0x35, 0x19, 0xfb, 0x1f, 0xf4, 0x42, 0x72, 0x15, 0x77, 0xcc, 0xea,
+	0x1e, 0xfc, 0x0e, 0x00, 0x00, 0xff, 0xff, 0x6f, 0x61, 0x42, 0x1c, 0x3a, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -275,8 +187,6 @@ const _ = grpc.SupportPackageIsVersion4
 type MsgClient interface {
 	// submit query request
 	SubmitCrossChainQuery(ctx context.Context, in *MsgSubmitCrossChainQuery, opts ...grpc.CallOption) (*MsgSubmitCrossChainQueryResponse, error)
-	// submit query result
-	SubmitCrossChainQueryResult(ctx context.Context, in *MsgSubmitCrossChainQueryResult, opts ...grpc.CallOption) (*MsgSubmitCrossChainQueryResultResponse, error)
 }
 
 type msgClient struct {
@@ -296,21 +206,10 @@ func (c *msgClient) SubmitCrossChainQuery(ctx context.Context, in *MsgSubmitCros
 	return out, nil
 }
 
-func (c *msgClient) SubmitCrossChainQueryResult(ctx context.Context, in *MsgSubmitCrossChainQueryResult, opts ...grpc.CallOption) (*MsgSubmitCrossChainQueryResultResponse, error) {
-	out := new(MsgSubmitCrossChainQueryResultResponse)
-	err := c.cc.Invoke(ctx, "/ibc.applications.ibc_query.v1.Msg/SubmitCrossChainQueryResult", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// submit query request
 	SubmitCrossChainQuery(context.Context, *MsgSubmitCrossChainQuery) (*MsgSubmitCrossChainQueryResponse, error)
-	// submit query result
-	SubmitCrossChainQueryResult(context.Context, *MsgSubmitCrossChainQueryResult) (*MsgSubmitCrossChainQueryResultResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -319,9 +218,6 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) SubmitCrossChainQuery(ctx context.Context, req *MsgSubmitCrossChainQuery) (*MsgSubmitCrossChainQueryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitCrossChainQuery not implemented")
-}
-func (*UnimplementedMsgServer) SubmitCrossChainQueryResult(ctx context.Context, req *MsgSubmitCrossChainQueryResult) (*MsgSubmitCrossChainQueryResultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitCrossChainQueryResult not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -346,24 +242,6 @@ func _Msg_SubmitCrossChainQuery_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitCrossChainQueryResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitCrossChainQueryResult)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitCrossChainQueryResult(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.applications.ibc_query.v1.Msg/SubmitCrossChainQueryResult",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitCrossChainQueryResult(ctx, req.(*MsgSubmitCrossChainQueryResult))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ibc.applications.ibc_query.v1.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -371,10 +249,6 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SubmitCrossChainQuery",
 			Handler:    _Msg_SubmitCrossChainQuery_Handler,
-		},
-		{
-			MethodName: "SubmitCrossChainQueryResult",
-			Handler:    _Msg_SubmitCrossChainQueryResult_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -422,6 +296,13 @@ func (m *MsgSubmitCrossChainQuery) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i--
 		dAtA[i] = 0x3a
 	}
+	if len(m.ClientId) > 0 {
+		i -= len(m.ClientId)
+		copy(dAtA[i:], m.ClientId)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ClientId)))
+		i--
+		dAtA[i] = 0x32
+	}
 	if m.QueryHeight != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.QueryHeight))
 		i--
@@ -432,16 +313,18 @@ func (m *MsgSubmitCrossChainQuery) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i--
 		dAtA[i] = 0x20
 	}
-	{
-		size, err := m.LocalTimeoutHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
+	if m.LocalTimeoutHeight != nil {
+		{
+			size, err := m.LocalTimeoutHeight.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTx(dAtA, i, uint64(size))
 		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
+		i--
+		dAtA[i] = 0x1a
 	}
-	i--
-	dAtA[i] = 0x1a
 	if len(m.Path) > 0 {
 		i -= len(m.Path)
 		copy(dAtA[i:], m.Path)
@@ -494,78 +377,6 @@ func (m *MsgSubmitCrossChainQueryResponse) MarshalToSizedBuffer(dAtA []byte) (in
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgSubmitCrossChainQueryResult) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgSubmitCrossChainQueryResult) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgSubmitCrossChainQueryResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Relayer) > 0 {
-		i -= len(m.Relayer)
-		copy(dAtA[i:], m.Relayer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Relayer)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Data) > 0 {
-		i -= len(m.Data)
-		copy(dAtA[i:], m.Data)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Data)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Result != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.Result))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Id)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgSubmitCrossChainQueryResultResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgSubmitCrossChainQueryResultResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgSubmitCrossChainQueryResultResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -591,13 +402,19 @@ func (m *MsgSubmitCrossChainQuery) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = m.LocalTimeoutHeight.Size()
-	n += 1 + l + sovTx(uint64(l))
+	if m.LocalTimeoutHeight != nil {
+		l = m.LocalTimeoutHeight.Size()
+		n += 1 + l + sovTx(uint64(l))
+	}
 	if m.LocalTimeoutStamp != 0 {
 		n += 1 + sovTx(uint64(m.LocalTimeoutStamp))
 	}
 	if m.QueryHeight != 0 {
 		n += 1 + sovTx(uint64(m.QueryHeight))
+	}
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
 	}
 	l = len(m.Sender)
 	if l > 0 {
@@ -627,39 +444,6 @@ func (m *MsgSubmitCrossChainQueryResponse) Size() (n int) {
 	if m.CapKey != 0 {
 		n += 1 + sovTx(uint64(m.CapKey))
 	}
-	return n
-}
-
-func (m *MsgSubmitCrossChainQueryResult) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	if m.Result != 0 {
-		n += 1 + sovTx(uint64(m.Result))
-	}
-	l = len(m.Data)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Relayer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
-
-func (m *MsgSubmitCrossChainQueryResultResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
 	return n
 }
 
@@ -791,6 +575,9 @@ func (m *MsgSubmitCrossChainQuery) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
+			if m.LocalTimeoutHeight == nil {
+				m.LocalTimeoutHeight = &types.Height{}
+			}
 			if err := m.LocalTimeoutHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -863,6 +650,7 @@ func (m *MsgSubmitCrossChainQuery) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
@@ -1061,223 +849,6 @@ func (m *MsgSubmitCrossChainQueryResponse) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgSubmitCrossChainQueryResult) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitCrossChainQueryResult: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitCrossChainQueryResult: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
-			}
-			m.Result = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Result |= QueryResult(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
-			if m.Data == nil {
-				m.Data = []byte{}
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Relayer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Relayer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgSubmitCrossChainQueryResultResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitCrossChainQueryResultResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitCrossChainQueryResultResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])

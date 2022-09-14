@@ -1,6 +1,7 @@
 package ibc_query
 
 import (
+	"fmt"
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -36,7 +37,7 @@ func ValidateIBCQueryChannelParams(
 	portID string,
 	channelID string,
 ) error {
-	
+
 	// Require portID is the portID transfer module is bound to
 	boundPort := keeper.GetPort(ctx)
 	if boundPort != portID {
@@ -156,24 +157,14 @@ func (im IBCModule) OnRecvPacket(
 ) ibcexported.Acknowledgement {
 	ack := channeltypes.NewResultAcknowledgement([]byte{byte(1)})
 
-	var data types.MsgSubmitCrossChainQuery
-	var ackErr error
-	if err := types.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
-		ackErr = sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "cannot unmarshal ICS-20 transfer packet data")
-		ack = channeltypes.NewErrorAcknowledgement(ackErr)
-	}
-
-	// only attempt the application logic if the packet data
-	// was successfully decoded
-	if ack.Success() {
-		err := im.keeper.OnRecvPacket(ctx, packet, data)
-		if err != nil {
-			ack = channeltypes.NewErrorAcknowledgement(err)
-		}
+	err := im.keeper.OnRecvPacket(ctx, packet)
+	if err != nil {
+		ack = channeltypes.NewErrorAcknowledgement(err)
 	}
 
 	eventAttributes := []sdk.Attribute{
 		sdk.NewAttribute(sdk.AttributeKeyModule, types.ModuleName),
+		sdk.NewAttribute(types.AttributeKeyAckSuccess, fmt.Sprintf("%t", ack.Success())),
 	}
 
 	ctx.EventManager().EmitEvent(
@@ -206,7 +197,7 @@ func (im IBCModule) OnAcknowledgementPacket(
 
 	if err := im.keeper.OnAcknowledgementPacket(ctx, packet, data, ack); err != nil {
 		return err
-	};
+	}
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
@@ -257,5 +248,5 @@ func (im IBCModule) OnTimeoutPacket(
 		),
 	)
 
-	 return nil
+	return nil
 }

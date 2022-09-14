@@ -99,8 +99,6 @@
 - [ibc/applications/ibc_query/v1/tx.proto](#ibc/applications/ibc_query/v1/tx.proto)
     - [MsgSubmitCrossChainQuery](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQuery)
     - [MsgSubmitCrossChainQueryResponse](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResponse)
-    - [MsgSubmitCrossChainQueryResult](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResult)
-    - [MsgSubmitCrossChainQueryResultResponse](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResultResponse)
   
     - [Msg](#ibc.applications.ibc_query.v1.Msg)
   
@@ -1455,7 +1453,7 @@ Msg defines the ICS29 Msg service.
 <a name="ibc.applications.ibc_query.v1.EventQuerySubmitted"></a>
 
 ### EventQuerySubmitted
-
+EventQuerySubmitted emitted when process MsgSubmitCrossChainQuery tx
 
 
 | Field | Type | Label | Description |
@@ -1534,6 +1532,7 @@ GenesisState defines the ICS31 ibc-query genesis state
 | ----- | ---- | ----- | ----------- |
 | `queries` | [CrossChainQuery](#ibc.applications.ibc_query.v1.CrossChainQuery) | repeated |  |
 | `results` | [CrossChainQueryResult](#ibc.applications.ibc_query.v1.CrossChainQueryResult) | repeated |  |
+| `port_id` | [string](#string) |  |  |
 
 
 
@@ -1666,34 +1665,6 @@ MsgSubmitCrossChainQueryResponse
 
 
 
-
-<a name="ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResult"></a>
-
-### MsgSubmitCrossChainQueryResult
-MsgSubmitCrossChainQueryResult
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| `id` | [string](#string) |  |  |
-| `result` | [QueryResult](#ibc.applications.ibc_query.v1.QueryResult) |  |  |
-| `data` | [bytes](#bytes) |  |  |
-| `relayer` | [string](#string) |  | relayer address |
-
-
-
-
-
-
-<a name="ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResultResponse"></a>
-
-### MsgSubmitCrossChainQueryResultResponse
-MsgSubmitCrossChainQueryResultResponse
-
-
-
-
-
  <!-- end messages -->
 
  <!-- end enums -->
@@ -1709,7 +1680,6 @@ Msg
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
 | `SubmitCrossChainQuery` | [MsgSubmitCrossChainQuery](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQuery) | [MsgSubmitCrossChainQueryResponse](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResponse) | submit query request | |
-| `SubmitCrossChainQueryResult` | [MsgSubmitCrossChainQueryResult](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResult) | [MsgSubmitCrossChainQueryResultResponse](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResultResponse) | submit query result | |
 
  <!-- end services -->
 
