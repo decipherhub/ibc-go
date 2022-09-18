@@ -2,6 +2,7 @@ package types
 
 import (
 	fmt "fmt"
+
 	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
 	host "github.com/cosmos/ibc-go/v4/modules/core/24-host"
 )
@@ -33,7 +34,7 @@ func NewEventQuerySubmitted(
 	return &EventQuerySubmitted{
 		Id:                 id,
 		Path:               path,
-		LocalTimeoutHeight: &localTimeoutHeight,
+		LocalTimeoutHeight: localTimeoutHeight,
 		LocalTimeoutStamp:  localTimeoutStamp,
 		QueryHeight:        queryHeight,
 	}

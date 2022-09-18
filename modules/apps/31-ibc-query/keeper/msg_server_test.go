@@ -35,7 +35,7 @@ func (suite *KeeperTestSuite) TestSubmitCrossChainQuery() {
 			true,
 			func() {
 				suite.coordinator.CreateChannels(path)
-				msg = types.NewMsgSubmitCrossChainQuery("query-1", "test/query_path", &timeoutHeight, timeoutTimestamp, queryHeight.RevisionHeight, addr, path.EndpointA.ChannelConfig.PortID, path.EndpointA.ChannelID)
+				msg = types.NewMsgSubmitCrossChainQuery("query-1", "test/query_path", timeoutHeight, timeoutTimestamp, queryHeight.RevisionHeight, addr, path.EndpointA.ChannelConfig.PortID, path.EndpointA.ChannelID)
 			},
 		},
 	}

@@ -55,22 +55,28 @@ func (k Keeper) SendQuery(ctx sdk.Context,
 
 // OnRecvPacket processes a cross chain query result.
 func (k Keeper) OnRecvPacket(ctx sdk.Context, packet channeltypes.Packet) error {
-	var data types.CrossChainQueryResult
+	var packetData types.IBCQueryResultPacketData
+	var queryResult types.CrossChainQueryResult
 
-	if err := types.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
-		return sdkerrors.Wrapf(types.ErrUnknownDataType, "cannot unmarshal ICS-31 interchain query packet data")
+	if err := types.ModuleCdc.UnmarshalJSON(packet.GetData(), &packetData); err != nil {
+		return sdkerrors.Wrapf(types.ErrUnknownDataType, "cannot unmarshal ICS-31 interchain query packet packetData")
 	}
 
-	// check CrossChainQuery exist
-	if _, found := k.GetCrossChainQuery(ctx, data.Id); !found {
-		return sdkerrors.Wrapf(types.ErrCrossChainQueryNotFound, "query Id doesn't exist in store")
+	// TODO: validate query packetData with proof
+
+	queryResult = types.CrossChainQueryResult{
+		Id:     packetData.Id,
+		Result: queryResult.Result,
+		Data:   packetData.Data,
 	}
 
-	// remove query from privateStore
-	k.DeleteCrossChainQuery(ctx, data.Id)
+	// remove CrossChainQuery from privateStore
+	if _, found := k.GetCrossChainQuery(ctx, queryResult.Id); found {
+		k.DeleteCrossChainQuery(ctx, queryResult.Id)
+	}
 
 	// store result in privateStore
-	k.SetCrossChainQueryResult(ctx, data)
+	k.SetCrossChainQueryResult(ctx, queryResult)
 
 	return nil
 }
