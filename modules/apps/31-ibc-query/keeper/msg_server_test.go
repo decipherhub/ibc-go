@@ -42,7 +42,7 @@ func (suite *KeeperTestSuite) TestSubmitCrossChainQuery() {
 
 	for _, tc := range testCases {
 		suite.SetupTest()
-		path = NewQueryrPath(suite.chainA, suite.chainB)
+		path = NewQueryPath(suite.chainA, suite.chainB)
 		suite.coordinator.SetupConnections(path)
 
 		tc.malleate()

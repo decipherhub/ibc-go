@@ -26,7 +26,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.chainC = suite.coordinator.GetChain(ibctesting.GetChainID(3))
 }
 
-func NewQueryrPath(chainA, chainB *ibctesting.TestChain) *ibctesting.Path {
+func NewQueryPath(chainA, chainB *ibctesting.TestChain) *ibctesting.Path {
 	path := ibctesting.NewPath(chainA, chainB)
 	path.EndpointA.ChannelConfig.PortID = ibctesting.QueryPort
 	path.EndpointB.ChannelConfig.PortID = ibctesting.QueryPort
