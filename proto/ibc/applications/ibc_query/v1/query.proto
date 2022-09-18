@@ -6,6 +6,7 @@ option go_package = "github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types
 
 import "google/api/annotations.proto";
 import "ibc/applications/ibc_query/v1/genesis.proto";
+import "proofs.proto";
 
 // Query
 service Query {
@@ -23,7 +24,10 @@ message QueryCrossChainQuery {
 
 // QueryCrossChainQueryResponse
 message QueryCrossChainQueryResponse {
-  string      id     = 1;
-  QueryResult result = 2;
-  bytes       data   = 3;
+  string                     id        = 1;
+  QueryResult                result    = 2;
+  bytes                      data      = 3;
+  //TODO 
+  // Proof specifications used in verifying counterparty state
+  repeated ics23.ProofSpec   proof_specs = 4; 
 }
