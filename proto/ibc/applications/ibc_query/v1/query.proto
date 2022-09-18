@@ -9,20 +9,20 @@ import "ibc/applications/ibc_query/v1/genesis.proto";
 
 // Query
 service Query {
-  // query CrossChainQuery
-  rpc CrossChainQuery(QueryCrossChainQuery) returns (QueryCrossChainQueryResponse) {
+  // query CrossChainQueryResult
+  rpc CrossChainQueryResult(QueryCrossChainQueryResult) returns (QueryCrossChainQueryResultResponse) {
     option (google.api.http).get = "/ibc/apps/ibc-query/v1/{id}";
   }
 }
 
 // QueryCrossChainQuery
-message QueryCrossChainQuery {
+message QueryCrossChainQueryResult {
   // query id
   string id = 1;
 }
 
 // QueryCrossChainQueryResponse
-message QueryCrossChainQueryResponse {
+message QueryCrossChainQueryResultResponse {
   string      id     = 1;
   QueryResult result = 2;
   bytes       data   = 3;

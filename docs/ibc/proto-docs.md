@@ -90,9 +90,12 @@
   
     - [QueryResult](#ibc.applications.ibc_query.v1.QueryResult)
   
+- [ibc/applications/ibc_query/v1/packet.proto](#ibc/applications/ibc_query/v1/packet.proto)
+    - [IBCQueryPacketData](#ibc.applications.ibc_query.v1.IBCQueryPacketData)
+  
 - [ibc/applications/ibc_query/v1/query.proto](#ibc/applications/ibc_query/v1/query.proto)
-    - [QueryCrossChainQuery](#ibc.applications.ibc_query.v1.QueryCrossChainQuery)
-    - [QueryCrossChainQueryResponse](#ibc.applications.ibc_query.v1.QueryCrossChainQueryResponse)
+    - [QueryCrossChainQueryResult](#ibc.applications.ibc_query.v1.QueryCrossChainQueryResult)
+    - [QueryCrossChainQueryResultResponse](#ibc.applications.ibc_query.v1.QueryCrossChainQueryResultResponse)
   
     - [Query](#ibc.applications.ibc_query.v1.Query)
   
@@ -1562,6 +1565,40 @@ QueryResult
 
 
 
+<a name="ibc/applications/ibc_query/v1/packet.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## ibc/applications/ibc_query/v1/packet.proto
+
+
+
+<a name="ibc.applications.ibc_query.v1.IBCQueryPacketData"></a>
+
+### IBCQueryPacketData
+IBCQueryPacketData defines a struct for the packet payload
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `path` | [string](#string) |  |  |
+| `query_height` | [uint64](#uint64) |  |  |
+| `proof_specs` | [ics23.ProofSpec](#ics23.ProofSpec) | repeated | TODO Proof specifications used in verifying counterparty state |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
 <a name="ibc/applications/ibc_query/v1/query.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -1569,9 +1606,9 @@ QueryResult
 
 
 
-<a name="ibc.applications.ibc_query.v1.QueryCrossChainQuery"></a>
+<a name="ibc.applications.ibc_query.v1.QueryCrossChainQueryResult"></a>
 
-### QueryCrossChainQuery
+### QueryCrossChainQueryResult
 QueryCrossChainQuery
 
 
@@ -1584,9 +1621,9 @@ QueryCrossChainQuery
 
 
 
-<a name="ibc.applications.ibc_query.v1.QueryCrossChainQueryResponse"></a>
+<a name="ibc.applications.ibc_query.v1.QueryCrossChainQueryResultResponse"></a>
 
-### QueryCrossChainQueryResponse
+### QueryCrossChainQueryResultResponse
 QueryCrossChainQueryResponse
 
 
@@ -1614,7 +1651,7 @@ Query
 
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
-| `CrossChainQuery` | [QueryCrossChainQuery](#ibc.applications.ibc_query.v1.QueryCrossChainQuery) | [QueryCrossChainQueryResponse](#ibc.applications.ibc_query.v1.QueryCrossChainQueryResponse) | query CrossChainQuery | GET|/ibc/apps/ibc-query/v1/{id}|
+| `CrossChainQueryResult` | [QueryCrossChainQueryResult](#ibc.applications.ibc_query.v1.QueryCrossChainQueryResult) | [QueryCrossChainQueryResultResponse](#ibc.applications.ibc_query.v1.QueryCrossChainQueryResultResponse) | query CrossChainQueryResult | GET|/ibc/apps/ibc-query/v1/{id}|
 
  <!-- end services -->
 

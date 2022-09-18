@@ -29,23 +29,23 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // QueryCrossChainQuery
-type QueryCrossChainQuery struct {
+type QueryCrossChainQueryResult struct {
 	// query id
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
-func (m *QueryCrossChainQuery) Reset()         { *m = QueryCrossChainQuery{} }
-func (m *QueryCrossChainQuery) String() string { return proto.CompactTextString(m) }
-func (*QueryCrossChainQuery) ProtoMessage()    {}
-func (*QueryCrossChainQuery) Descriptor() ([]byte, []int) {
+func (m *QueryCrossChainQueryResult) Reset()         { *m = QueryCrossChainQueryResult{} }
+func (m *QueryCrossChainQueryResult) String() string { return proto.CompactTextString(m) }
+func (*QueryCrossChainQueryResult) ProtoMessage()    {}
+func (*QueryCrossChainQueryResult) Descriptor() ([]byte, []int) {
 	return fileDescriptor_41a30807902c5755, []int{0}
 }
-func (m *QueryCrossChainQuery) XXX_Unmarshal(b []byte) error {
+func (m *QueryCrossChainQueryResult) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCrossChainQuery) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCrossChainQueryResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCrossChainQuery.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCrossChainQueryResult.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -55,19 +55,19 @@ func (m *QueryCrossChainQuery) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *QueryCrossChainQuery) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCrossChainQuery.Merge(m, src)
+func (m *QueryCrossChainQueryResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCrossChainQueryResult.Merge(m, src)
 }
-func (m *QueryCrossChainQuery) XXX_Size() int {
+func (m *QueryCrossChainQueryResult) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCrossChainQuery) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCrossChainQuery.DiscardUnknown(m)
+func (m *QueryCrossChainQueryResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCrossChainQueryResult.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCrossChainQuery proto.InternalMessageInfo
+var xxx_messageInfo_QueryCrossChainQueryResult proto.InternalMessageInfo
 
-func (m *QueryCrossChainQuery) GetId() string {
+func (m *QueryCrossChainQueryResult) GetId() string {
 	if m != nil {
 		return m.Id
 	}
@@ -75,24 +75,24 @@ func (m *QueryCrossChainQuery) GetId() string {
 }
 
 // QueryCrossChainQueryResponse
-type QueryCrossChainQueryResponse struct {
+type QueryCrossChainQueryResultResponse struct {
 	Id     string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Result QueryResult `protobuf:"varint,2,opt,name=result,proto3,enum=ibc.applications.ibc_query.v1.QueryResult" json:"result,omitempty"`
 	Data   []byte      `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (m *QueryCrossChainQueryResponse) Reset()         { *m = QueryCrossChainQueryResponse{} }
-func (m *QueryCrossChainQueryResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryCrossChainQueryResponse) ProtoMessage()    {}
-func (*QueryCrossChainQueryResponse) Descriptor() ([]byte, []int) {
+func (m *QueryCrossChainQueryResultResponse) Reset()         { *m = QueryCrossChainQueryResultResponse{} }
+func (m *QueryCrossChainQueryResultResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryCrossChainQueryResultResponse) ProtoMessage()    {}
+func (*QueryCrossChainQueryResultResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_41a30807902c5755, []int{1}
 }
-func (m *QueryCrossChainQueryResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryCrossChainQueryResultResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCrossChainQueryResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCrossChainQueryResultResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCrossChainQueryResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCrossChainQueryResultResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -102,33 +102,33 @@ func (m *QueryCrossChainQueryResponse) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *QueryCrossChainQueryResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCrossChainQueryResponse.Merge(m, src)
+func (m *QueryCrossChainQueryResultResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCrossChainQueryResultResponse.Merge(m, src)
 }
-func (m *QueryCrossChainQueryResponse) XXX_Size() int {
+func (m *QueryCrossChainQueryResultResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCrossChainQueryResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCrossChainQueryResponse.DiscardUnknown(m)
+func (m *QueryCrossChainQueryResultResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCrossChainQueryResultResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCrossChainQueryResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryCrossChainQueryResultResponse proto.InternalMessageInfo
 
-func (m *QueryCrossChainQueryResponse) GetId() string {
+func (m *QueryCrossChainQueryResultResponse) GetId() string {
 	if m != nil {
 		return m.Id
 	}
 	return ""
 }
 
-func (m *QueryCrossChainQueryResponse) GetResult() QueryResult {
+func (m *QueryCrossChainQueryResultResponse) GetResult() QueryResult {
 	if m != nil {
 		return m.Result
 	}
 	return QueryResult_QUERY_RESULT_UNSPECIFIED
 }
 
-func (m *QueryCrossChainQueryResponse) GetData() []byte {
+func (m *QueryCrossChainQueryResultResponse) GetData() []byte {
 	if m != nil {
 		return m.Data
 	}
@@ -136,8 +136,8 @@ func (m *QueryCrossChainQueryResponse) GetData() []byte {
 }
 
 func init() {
-	proto.RegisterType((*QueryCrossChainQuery)(nil), "ibc.applications.ibc_query.v1.QueryCrossChainQuery")
-	proto.RegisterType((*QueryCrossChainQueryResponse)(nil), "ibc.applications.ibc_query.v1.QueryCrossChainQueryResponse")
+	proto.RegisterType((*QueryCrossChainQueryResult)(nil), "ibc.applications.ibc_query.v1.QueryCrossChainQueryResult")
+	proto.RegisterType((*QueryCrossChainQueryResultResponse)(nil), "ibc.applications.ibc_query.v1.QueryCrossChainQueryResultResponse")
 }
 
 func init() {
@@ -145,29 +145,29 @@ func init() {
 }
 
 var fileDescriptor_41a30807902c5755 = []byte{
-	// 339 bytes of a gzipped FileDescriptorProto
+	// 340 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0xcc, 0x4c, 0x4a, 0xd6,
 	0x4f, 0x2c, 0x28, 0xc8, 0xc9, 0x4c, 0x4e, 0x2c, 0xc9, 0xcc, 0xcf, 0x2b, 0xd6, 0xcf, 0x4c, 0x4a,
 	0x8e, 0x2f, 0x2c, 0x4d, 0x2d, 0xaa, 0xd4, 0x2f, 0x33, 0xd4, 0x07, 0x33, 0xf4, 0x0a, 0x8a, 0xf2,
 	0x4b, 0xf2, 0x85, 0x64, 0x33, 0x93, 0x92, 0xf5, 0x90, 0x95, 0xea, 0xc1, 0x95, 0xea, 0x95, 0x19,
 	0x4a, 0xc9, 0xa4, 0xe7, 0xe7, 0xa7, 0xe7, 0xa4, 0xea, 0x27, 0x16, 0x64, 0xea, 0x27, 0xe6, 0xe5,
 	0xe5, 0x97, 0x40, 0x15, 0x81, 0x35, 0x4b, 0x69, 0xe3, 0xb7, 0x27, 0x3d, 0x35, 0x2f, 0xb5, 0x38,
-	0x13, 0xaa, 0x58, 0x49, 0x8d, 0x4b, 0x24, 0x10, 0x24, 0xe3, 0x5c, 0x94, 0x5f, 0x5c, 0xec, 0x9c,
-	0x91, 0x98, 0x99, 0x07, 0xe6, 0x0a, 0xf1, 0x71, 0x31, 0x65, 0xa6, 0x48, 0x30, 0x2a, 0x30, 0x6a,
-	0x70, 0x06, 0x31, 0x65, 0xa6, 0x28, 0xb5, 0x31, 0x72, 0xc9, 0x60, 0x53, 0x18, 0x94, 0x5a, 0x5c,
-	0x90, 0x9f, 0x57, 0x9c, 0x8a, 0xae, 0x41, 0xc8, 0x89, 0x8b, 0xad, 0x28, 0xb5, 0xb8, 0x34, 0xa7,
-	0x44, 0x82, 0x49, 0x81, 0x51, 0x83, 0xcf, 0x48, 0x4b, 0x0f, 0xaf, 0x9f, 0xf4, 0x60, 0xa6, 0x95,
-	0xe6, 0x94, 0x04, 0x41, 0x75, 0x0a, 0x09, 0x71, 0xb1, 0xa4, 0x24, 0x96, 0x24, 0x4a, 0x30, 0x2b,
-	0x30, 0x6a, 0xf0, 0x04, 0x81, 0xd9, 0x46, 0x9b, 0x18, 0xb9, 0x58, 0x21, 0x4e, 0x5c, 0xc1, 0xc8,
-	0xc5, 0x8f, 0xee, 0x6c, 0x63, 0x62, 0x6c, 0x41, 0xd3, 0x24, 0x65, 0x4d, 0x86, 0x26, 0x98, 0xbf,
-	0x95, 0x94, 0x9b, 0x2e, 0x3f, 0x99, 0xcc, 0x24, 0x2b, 0x24, 0xad, 0x0f, 0x0d, 0x76, 0x70, 0x70,
-	0xeb, 0xc2, 0x83, 0xbb, 0x3a, 0x33, 0xa5, 0xd6, 0x29, 0xf4, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f,
-	0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86, 0x1b,
-	0x8f, 0xe5, 0x18, 0xa2, 0xac, 0xd3, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5,
-	0x93, 0xf3, 0x8b, 0x73, 0xf3, 0x21, 0xda, 0xd3, 0xf3, 0xf5, 0xcb, 0x4c, 0xf4, 0x73, 0xf3, 0x53,
-	0x4a, 0x73, 0x52, 0x8b, 0x21, 0xa6, 0x1a, 0x1b, 0xea, 0x22, 0x0c, 0x2e, 0xa9, 0x2c, 0x48, 0x2d,
-	0x4e, 0x62, 0x03, 0xc7, 0xa1, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0x45, 0x0b, 0x2d, 0x87, 0x5a,
-	0x02, 0x00, 0x00,
+	0x13, 0xaa, 0x58, 0x49, 0x87, 0x4b, 0x2a, 0x10, 0x24, 0xe3, 0x5c, 0x94, 0x5f, 0x5c, 0xec, 0x9c,
+	0x91, 0x98, 0x99, 0x07, 0xe6, 0x06, 0xa5, 0x16, 0x97, 0xe6, 0x94, 0x08, 0xf1, 0x71, 0x31, 0x65,
+	0xa6, 0x48, 0x30, 0x2a, 0x30, 0x6a, 0x70, 0x06, 0x31, 0x65, 0xa6, 0x28, 0xf5, 0x30, 0x72, 0x29,
+	0xe1, 0x56, 0x1e, 0x94, 0x5a, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0x8a, 0xae, 0x4d, 0xc8, 0x89, 0x8b,
+	0xad, 0x08, 0xac, 0x42, 0x82, 0x49, 0x81, 0x51, 0x83, 0xcf, 0x48, 0x4b, 0x0f, 0xaf, 0xff, 0xf4,
+	0x90, 0xcd, 0x84, 0xea, 0x14, 0x12, 0xe2, 0x62, 0x49, 0x49, 0x2c, 0x49, 0x94, 0x60, 0x56, 0x60,
+	0xd4, 0xe0, 0x09, 0x02, 0xb3, 0x8d, 0x8e, 0x30, 0x72, 0xb1, 0x82, 0xd5, 0x0a, 0xed, 0x62, 0xe4,
+	0x12, 0xc5, 0xee, 0x05, 0x4b, 0x62, 0xec, 0xc2, 0xaa, 0x55, 0xca, 0x91, 0x6c, 0xad, 0xb0, 0x90,
+	0x50, 0x52, 0x6e, 0xba, 0xfc, 0x64, 0x32, 0x93, 0xac, 0x90, 0xb4, 0x3e, 0x34, 0x52, 0xc0, 0x91,
+	0xa1, 0x0b, 0x8f, 0x8c, 0xea, 0xcc, 0x94, 0x5a, 0xa7, 0xd0, 0x13, 0x8f, 0xe4, 0x18, 0x2f, 0x3c,
+	0x92, 0x63, 0x7c, 0xf0, 0x48, 0x8e, 0x71, 0xc2, 0x63, 0x39, 0x86, 0x0b, 0x8f, 0xe5, 0x18, 0x6e,
+	0x3c, 0x96, 0x63, 0x88, 0xb2, 0x4e, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce, 0xcf, 0xd5,
+	0x4f, 0xce, 0x2f, 0xce, 0xcd, 0x87, 0x68, 0x4f, 0xcf, 0xd7, 0x2f, 0x33, 0xd1, 0xcf, 0xcd, 0x4f,
+	0x29, 0xcd, 0x49, 0x2d, 0x86, 0x98, 0x6a, 0x6c, 0xa8, 0x8b, 0x30, 0xb8, 0xa4, 0xb2, 0x20, 0xb5,
+	0x38, 0x89, 0x0d, 0x1c, 0xc3, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xc4, 0x53, 0x49, 0x71,
+	0x78, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -182,8 +182,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryClient interface {
-	// query CrossChainQuery
-	CrossChainQuery(ctx context.Context, in *QueryCrossChainQuery, opts ...grpc.CallOption) (*QueryCrossChainQueryResponse, error)
+	// query CrossChainQueryResult
+	CrossChainQueryResult(ctx context.Context, in *QueryCrossChainQueryResult, opts ...grpc.CallOption) (*QueryCrossChainQueryResultResponse, error)
 }
 
 type queryClient struct {
@@ -194,9 +194,9 @@ func NewQueryClient(cc grpc1.ClientConn) QueryClient {
 	return &queryClient{cc}
 }
 
-func (c *queryClient) CrossChainQuery(ctx context.Context, in *QueryCrossChainQuery, opts ...grpc.CallOption) (*QueryCrossChainQueryResponse, error) {
-	out := new(QueryCrossChainQueryResponse)
-	err := c.cc.Invoke(ctx, "/ibc.applications.ibc_query.v1.Query/CrossChainQuery", in, out, opts...)
+func (c *queryClient) CrossChainQueryResult(ctx context.Context, in *QueryCrossChainQueryResult, opts ...grpc.CallOption) (*QueryCrossChainQueryResultResponse, error) {
+	out := new(QueryCrossChainQueryResultResponse)
+	err := c.cc.Invoke(ctx, "/ibc.applications.ibc_query.v1.Query/CrossChainQueryResult", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -205,36 +205,36 @@ func (c *queryClient) CrossChainQuery(ctx context.Context, in *QueryCrossChainQu
 
 // QueryServer is the server API for Query service.
 type QueryServer interface {
-	// query CrossChainQuery
-	CrossChainQuery(context.Context, *QueryCrossChainQuery) (*QueryCrossChainQueryResponse, error)
+	// query CrossChainQueryResult
+	CrossChainQueryResult(context.Context, *QueryCrossChainQueryResult) (*QueryCrossChainQueryResultResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
 type UnimplementedQueryServer struct {
 }
 
-func (*UnimplementedQueryServer) CrossChainQuery(ctx context.Context, req *QueryCrossChainQuery) (*QueryCrossChainQueryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CrossChainQuery not implemented")
+func (*UnimplementedQueryServer) CrossChainQueryResult(ctx context.Context, req *QueryCrossChainQueryResult) (*QueryCrossChainQueryResultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CrossChainQueryResult not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
 	s.RegisterService(&_Query_serviceDesc, srv)
 }
 
-func _Query_CrossChainQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCrossChainQuery)
+func _Query_CrossChainQueryResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCrossChainQueryResult)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).CrossChainQuery(ctx, in)
+		return srv.(QueryServer).CrossChainQueryResult(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ibc.applications.ibc_query.v1.Query/CrossChainQuery",
+		FullMethod: "/ibc.applications.ibc_query.v1.Query/CrossChainQueryResult",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CrossChainQuery(ctx, req.(*QueryCrossChainQuery))
+		return srv.(QueryServer).CrossChainQueryResult(ctx, req.(*QueryCrossChainQueryResult))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -244,15 +244,15 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*QueryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CrossChainQuery",
-			Handler:    _Query_CrossChainQuery_Handler,
+			MethodName: "CrossChainQueryResult",
+			Handler:    _Query_CrossChainQueryResult_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "ibc/applications/ibc_query/v1/query.proto",
 }
 
-func (m *QueryCrossChainQuery) Marshal() (dAtA []byte, err error) {
+func (m *QueryCrossChainQueryResult) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -262,12 +262,12 @@ func (m *QueryCrossChainQuery) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryCrossChainQuery) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCrossChainQueryResult) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCrossChainQuery) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCrossChainQueryResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -282,7 +282,7 @@ func (m *QueryCrossChainQuery) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCrossChainQueryResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryCrossChainQueryResultResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -292,12 +292,12 @@ func (m *QueryCrossChainQueryResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryCrossChainQueryResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCrossChainQueryResultResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCrossChainQueryResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCrossChainQueryResultResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -335,7 +335,7 @@ func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *QueryCrossChainQuery) Size() (n int) {
+func (m *QueryCrossChainQueryResult) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -348,7 +348,7 @@ func (m *QueryCrossChainQuery) Size() (n int) {
 	return n
 }
 
-func (m *QueryCrossChainQueryResponse) Size() (n int) {
+func (m *QueryCrossChainQueryResultResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -374,7 +374,7 @@ func sovQuery(x uint64) (n int) {
 func sozQuery(x uint64) (n int) {
 	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *QueryCrossChainQuery) Unmarshal(dAtA []byte) error {
+func (m *QueryCrossChainQueryResult) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -397,10 +397,10 @@ func (m *QueryCrossChainQuery) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCrossChainQuery: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCrossChainQueryResult: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCrossChainQuery: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCrossChainQueryResult: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -456,7 +456,7 @@ func (m *QueryCrossChainQuery) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryCrossChainQueryResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryCrossChainQueryResultResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -479,10 +479,10 @@ func (m *QueryCrossChainQueryResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCrossChainQueryResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCrossChainQueryResultResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCrossChainQueryResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCrossChainQueryResultResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
