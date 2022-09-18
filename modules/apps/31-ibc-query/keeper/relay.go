@@ -69,6 +69,10 @@ func (k Keeper) OnRecvPacket(ctx sdk.Context, packet channeltypes.Packet) error 
 		return sdkerrors.Wrapf(types.ErrUnknownDataType, "cannot unmarshal ICS-31 interchain query packet packetData")
 	}
 
+	if err := packetData.ValidateBasic(); err != nil {
+		return err
+	}
+
 	// TODO: validate query packetData with proof
 
 	queryResult = types.CrossChainQueryResult{
