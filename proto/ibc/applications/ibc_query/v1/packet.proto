@@ -3,13 +3,23 @@ syntax = "proto3";
 package ibc.applications.ibc_query.v1;
 
 import "proofs.proto";
+import "ibc/applications/ibc_query/v1/crosschainquery.proto";
 
 option go_package = "github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types";
 
-// IBCQueryPacketData defines a struct for the packet payload
+// IBCQueryPacketData defines a struct for the cross chain query packet payload
 message IBCQueryPacketData {
-  string   id                          = 1;
-  string   path                        = 2;
-  uint64   query_height                = 3;
-  repeated ics23.ProofSpec proof_specs = 4; // TODO: Proof specifications used in verifying counterparty state
+  string id           = 1;
+  string path         = 2;
+  uint64 query_height = 3;
+}
+
+// IBCQueryPacketData defines a struct for the cross chain query result packet payload
+message IBCQueryResultPacketData {
+  string      id                       = 1;
+  string      path                     = 2;
+  uint64      query_height             = 3;
+  QueryResult result                   = 4;
+  bytes       data                     = 5;
+  repeated ics23.ProofSpec proof_specs = 6; // TODO: Proof specifications used in verifying counterparty state
 }

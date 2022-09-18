@@ -23,12 +23,11 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// IBCQueryPacketData defines a struct for the packet payload
+// IBCQueryPacketData defines a struct for the cross chain query packet payload
 type IBCQueryPacketData struct {
-	Id          string           `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Path        string           `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-	QueryHeight uint64           `protobuf:"varint,3,opt,name=query_height,json=queryHeight,proto3" json:"query_height,omitempty"`
-	ProofSpecs  []*_go.ProofSpec `protobuf:"bytes,4,rep,name=proof_specs,json=proofSpecs,proto3" json:"proof_specs,omitempty"`
+	Id          string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Path        string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	QueryHeight uint64 `protobuf:"varint,3,opt,name=query_height,json=queryHeight,proto3" json:"query_height,omitempty"`
 }
 
 func (m *IBCQueryPacketData) Reset()         { *m = IBCQueryPacketData{} }
@@ -85,7 +84,85 @@ func (m *IBCQueryPacketData) GetQueryHeight() uint64 {
 	return 0
 }
 
-func (m *IBCQueryPacketData) GetProofSpecs() []*_go.ProofSpec {
+// IBCQueryPacketData defines a struct for the cross chain query result packet payload
+type IBCQueryResultPacketData struct {
+	Id          string           `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Path        string           `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	QueryHeight uint64           `protobuf:"varint,3,opt,name=query_height,json=queryHeight,proto3" json:"query_height,omitempty"`
+	Result      QueryResult      `protobuf:"varint,4,opt,name=result,proto3,enum=ibc.applications.ibc_query.v1.QueryResult" json:"result,omitempty"`
+	Data        []byte           `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
+	ProofSpecs  []*_go.ProofSpec `protobuf:"bytes,6,rep,name=proof_specs,json=proofSpecs,proto3" json:"proof_specs,omitempty"`
+}
+
+func (m *IBCQueryResultPacketData) Reset()         { *m = IBCQueryResultPacketData{} }
+func (m *IBCQueryResultPacketData) String() string { return proto.CompactTextString(m) }
+func (*IBCQueryResultPacketData) ProtoMessage()    {}
+func (*IBCQueryResultPacketData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0c3b95af207674c8, []int{1}
+}
+func (m *IBCQueryResultPacketData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IBCQueryResultPacketData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IBCQueryResultPacketData.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IBCQueryResultPacketData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IBCQueryResultPacketData.Merge(m, src)
+}
+func (m *IBCQueryResultPacketData) XXX_Size() int {
+	return m.Size()
+}
+func (m *IBCQueryResultPacketData) XXX_DiscardUnknown() {
+	xxx_messageInfo_IBCQueryResultPacketData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IBCQueryResultPacketData proto.InternalMessageInfo
+
+func (m *IBCQueryResultPacketData) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *IBCQueryResultPacketData) GetPath() string {
+	if m != nil {
+		return m.Path
+	}
+	return ""
+}
+
+func (m *IBCQueryResultPacketData) GetQueryHeight() uint64 {
+	if m != nil {
+		return m.QueryHeight
+	}
+	return 0
+}
+
+func (m *IBCQueryResultPacketData) GetResult() QueryResult {
+	if m != nil {
+		return m.Result
+	}
+	return QueryResult_QUERY_RESULT_UNSPECIFIED
+}
+
+func (m *IBCQueryResultPacketData) GetData() []byte {
+	if m != nil {
+		return m.Data
+	}
+	return nil
+}
+
+func (m *IBCQueryResultPacketData) GetProofSpecs() []*_go.ProofSpec {
 	if m != nil {
 		return m.ProofSpecs
 	}
@@ -94,6 +171,7 @@ func (m *IBCQueryPacketData) GetProofSpecs() []*_go.ProofSpec {
 
 func init() {
 	proto.RegisterType((*IBCQueryPacketData)(nil), "ibc.applications.ibc_query.v1.IBCQueryPacketData")
+	proto.RegisterType((*IBCQueryResultPacketData)(nil), "ibc.applications.ibc_query.v1.IBCQueryResultPacketData")
 }
 
 func init() {
@@ -101,25 +179,29 @@ func init() {
 }
 
 var fileDescriptor_0c3b95af207674c8 = []byte{
-	// 281 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x4c, 0x90, 0x31, 0x4b, 0xc4, 0x30,
-	0x1c, 0xc5, 0x2f, 0x77, 0x45, 0x30, 0x3d, 0x44, 0x32, 0x15, 0xc1, 0x50, 0x9d, 0x8a, 0x70, 0x09,
-	0xbd, 0xba, 0xb9, 0x9d, 0x0e, 0xba, 0x9d, 0x15, 0x17, 0x97, 0x92, 0xa6, 0xb1, 0x0d, 0x5e, 0x4d,
-	0x6c, 0xd2, 0xc2, 0x7d, 0x09, 0xf1, 0x63, 0x39, 0xde, 0xe8, 0x28, 0xed, 0x17, 0x91, 0xe6, 0x50,
-	0xdc, 0x1e, 0xef, 0x3d, 0xde, 0x9f, 0xff, 0x0f, 0x5e, 0xc8, 0x9c, 0x53, 0xa6, 0xf5, 0x46, 0x72,
-	0x66, 0xa5, 0x7a, 0x35, 0x54, 0xe6, 0x3c, 0x7b, 0x6b, 0x45, 0xb3, 0xa5, 0x5d, 0x4c, 0x35, 0xe3,
-	0x2f, 0xc2, 0x12, 0xdd, 0x28, 0xab, 0xd0, 0xa9, 0xcc, 0x39, 0xf9, 0xdf, 0x25, 0x7f, 0x5d, 0xd2,
-	0xc5, 0x27, 0x73, 0xdd, 0x28, 0xf5, 0x6c, 0xf6, 0xe5, 0xf3, 0x77, 0x00, 0xd1, 0xdd, 0xea, 0xfa,
-	0x7e, 0x4c, 0xd7, 0x6e, 0xe5, 0x86, 0x59, 0x86, 0x8e, 0xe0, 0x54, 0x16, 0x01, 0x08, 0x41, 0x74,
-	0x98, 0x4e, 0x65, 0x81, 0x10, 0xf4, 0x34, 0xb3, 0x55, 0x30, 0x75, 0x8e, 0xd3, 0xe8, 0x0c, 0xce,
-	0xdd, 0x68, 0x56, 0x09, 0x59, 0x56, 0x36, 0x98, 0x85, 0x20, 0xf2, 0x52, 0xdf, 0x79, 0xb7, 0xce,
-	0x42, 0x31, 0xf4, 0xdd, 0xb5, 0xcc, 0x68, 0xc1, 0x4d, 0xe0, 0x85, 0xb3, 0xc8, 0x5f, 0x1e, 0x13,
-	0xc9, 0xcd, 0x32, 0x21, 0xeb, 0x31, 0x79, 0xd0, 0x82, 0xa7, 0x50, 0xff, 0x4a, 0xb3, 0x7a, 0xfc,
-	0xec, 0x31, 0xd8, 0xf5, 0x18, 0x7c, 0xf7, 0x18, 0x7c, 0x0c, 0x78, 0xb2, 0x1b, 0xf0, 0xe4, 0x6b,
-	0xc0, 0x93, 0xa7, 0xab, 0x52, 0xda, 0xaa, 0xcd, 0x09, 0x57, 0x35, 0xe5, 0xca, 0xd4, 0xca, 0x41,
-	0x58, 0x94, 0x8a, 0x76, 0x97, 0xb4, 0x56, 0x45, 0xbb, 0x11, 0x66, 0x64, 0x64, 0x68, 0x12, 0x2f,
-	0xc6, 0x64, 0x8f, 0xc7, 0x6e, 0xb5, 0x30, 0xf9, 0x81, 0x7b, 0x37, 0xf9, 0x09, 0x00, 0x00, 0xff,
-	0xff, 0x89, 0x0a, 0x68, 0x8f, 0x49, 0x01, 0x00, 0x00,
+	// 343 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x51, 0x3f, 0x4f, 0x02, 0x31,
+	0x1c, 0xa5, 0x80, 0x24, 0x16, 0x42, 0x4c, 0xa7, 0x86, 0xc4, 0xcb, 0xc9, 0x74, 0x21, 0xa1, 0xcd,
+	0x71, 0x6e, 0x6e, 0xe8, 0xa0, 0x1b, 0x9e, 0x71, 0xd1, 0x81, 0xf4, 0x7a, 0x95, 0x6b, 0x04, 0x5a,
+	0xaf, 0x3d, 0x12, 0xbe, 0x85, 0x1f, 0xcb, 0x91, 0xd1, 0xd1, 0xc0, 0xea, 0x87, 0x30, 0xd7, 0x13,
+	0xc3, 0xc4, 0xe4, 0xf6, 0xf2, 0xfa, 0xfe, 0x34, 0xbf, 0x07, 0x07, 0x32, 0xe1, 0x94, 0x69, 0x3d,
+	0x97, 0x9c, 0x59, 0xa9, 0x96, 0x86, 0xca, 0x84, 0x4f, 0xdf, 0x0a, 0x91, 0xaf, 0xe9, 0x2a, 0xa4,
+	0x9a, 0xf1, 0x57, 0x61, 0x89, 0xce, 0x95, 0x55, 0xe8, 0x5c, 0x26, 0x9c, 0x1c, 0x6a, 0xc9, 0x9f,
+	0x96, 0xac, 0xc2, 0x5e, 0x47, 0xe7, 0x4a, 0xbd, 0x98, 0x4a, 0xdc, 0x8b, 0x8e, 0x07, 0xf3, 0x5c,
+	0x19, 0xc3, 0x33, 0x26, 0x97, 0x95, 0xdf, 0x99, 0xfa, 0xcf, 0x10, 0xdd, 0x8d, 0xaf, 0xef, 0x4b,
+	0x66, 0xe2, 0x9a, 0x6f, 0x98, 0x65, 0xa8, 0x0b, 0xeb, 0x32, 0xc5, 0xc0, 0x07, 0xc1, 0x69, 0x5c,
+	0x97, 0x29, 0x42, 0xb0, 0xa9, 0x99, 0xcd, 0x70, 0xdd, 0x31, 0x0e, 0xa3, 0x0b, 0xd8, 0x71, 0x41,
+	0xd3, 0x4c, 0xc8, 0x59, 0x66, 0x71, 0xc3, 0x07, 0x41, 0x33, 0x6e, 0x3b, 0xee, 0xd6, 0x51, 0xfd,
+	0x6f, 0x00, 0xf1, 0x3e, 0x3d, 0x16, 0xa6, 0x98, 0xdb, 0x7f, 0xef, 0x40, 0x63, 0xd8, 0xca, 0x5d,
+	0x34, 0x6e, 0xfa, 0x20, 0xe8, 0x8e, 0x06, 0xe4, 0xe8, 0xcd, 0xc8, 0xc1, 0x67, 0xe2, 0x5f, 0x67,
+	0x59, 0x9d, 0x32, 0xcb, 0xf0, 0x89, 0x0f, 0x82, 0x4e, 0xec, 0x30, 0x0a, 0x61, 0xdb, 0x5d, 0x77,
+	0x6a, 0xb4, 0xe0, 0x06, 0xb7, 0xfc, 0x46, 0xd0, 0x1e, 0x9d, 0x11, 0xc9, 0xcd, 0x28, 0x22, 0x93,
+	0xf2, 0xe5, 0x41, 0x0b, 0x1e, 0x43, 0xbd, 0x87, 0x66, 0xfc, 0xf8, 0xb1, 0xf5, 0xc0, 0x66, 0xeb,
+	0x81, 0xaf, 0xad, 0x07, 0xde, 0x77, 0x5e, 0x6d, 0xb3, 0xf3, 0x6a, 0x9f, 0x3b, 0xaf, 0xf6, 0x74,
+	0x35, 0x93, 0x36, 0x2b, 0x12, 0xc2, 0xd5, 0x82, 0x72, 0x65, 0x16, 0xca, 0x6d, 0x33, 0x9c, 0x29,
+	0xba, 0xba, 0xa4, 0x0b, 0x95, 0x16, 0x73, 0x61, 0xca, 0xe9, 0x0c, 0x8d, 0xc2, 0x61, 0xf9, 0x52,
+	0xad, 0x66, 0xd7, 0x5a, 0x98, 0xa4, 0xe5, 0x96, 0x8a, 0x7e, 0x02, 0x00, 0x00, 0xff, 0xff, 0x60,
+	0xbd, 0x89, 0xab, 0x39, 0x02, 0x00, 0x00,
 }
 
 func (m *IBCQueryPacketData) Marshal() (dAtA []byte, err error) {
@@ -142,6 +224,48 @@ func (m *IBCQueryPacketData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.QueryHeight != 0 {
+		i = encodeVarintPacket(dAtA, i, uint64(m.QueryHeight))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Path) > 0 {
+		i -= len(m.Path)
+		copy(dAtA[i:], m.Path)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.Path)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Id) > 0 {
+		i -= len(m.Id)
+		copy(dAtA[i:], m.Id)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.Id)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IBCQueryResultPacketData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IBCQueryResultPacketData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IBCQueryResultPacketData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	if len(m.ProofSpecs) > 0 {
 		for iNdEx := len(m.ProofSpecs) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -153,8 +277,20 @@ func (m *IBCQueryPacketData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintPacket(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x32
 		}
+	}
+	if len(m.Data) > 0 {
+		i -= len(m.Data)
+		copy(dAtA[i:], m.Data)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.Data)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.Result != 0 {
+		i = encodeVarintPacket(dAtA, i, uint64(m.Result))
+		i--
+		dAtA[i] = 0x20
 	}
 	if m.QueryHeight != 0 {
 		i = encodeVarintPacket(dAtA, i, uint64(m.QueryHeight))
@@ -205,6 +341,33 @@ func (m *IBCQueryPacketData) Size() (n int) {
 	}
 	if m.QueryHeight != 0 {
 		n += 1 + sovPacket(uint64(m.QueryHeight))
+	}
+	return n
+}
+
+func (m *IBCQueryResultPacketData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovPacket(uint64(l))
+	}
+	l = len(m.Path)
+	if l > 0 {
+		n += 1 + l + sovPacket(uint64(l))
+	}
+	if m.QueryHeight != 0 {
+		n += 1 + sovPacket(uint64(m.QueryHeight))
+	}
+	if m.Result != 0 {
+		n += 1 + sovPacket(uint64(m.Result))
+	}
+	l = len(m.Data)
+	if l > 0 {
+		n += 1 + l + sovPacket(uint64(l))
 	}
 	if len(m.ProofSpecs) > 0 {
 		for _, e := range m.ProofSpecs {
@@ -333,7 +496,193 @@ func (m *IBCQueryPacketData) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPacket(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IBCQueryResultPacketData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPacket
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IBCQueryResultPacketData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IBCQueryResultPacketData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Path = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryHeight", wireType)
+			}
+			m.QueryHeight = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.QueryHeight |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			m.Result = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Result |= QueryResult(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
+			if m.Data == nil {
+				m.Data = []byte{}
+			}
+			iNdEx = postIndex
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ProofSpecs", wireType)
 			}

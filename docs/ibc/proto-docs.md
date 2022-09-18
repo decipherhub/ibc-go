@@ -94,6 +94,7 @@
   
 - [ibc/applications/ibc_query/v1/packet.proto](#ibc/applications/ibc_query/v1/packet.proto)
     - [IBCQueryPacketData](#ibc.applications.ibc_query.v1.IBCQueryPacketData)
+    - [IBCQueryResultPacketData](#ibc.applications.ibc_query.v1.IBCQueryResultPacketData)
   
 - [ibc/applications/ibc_query/v1/query.proto](#ibc/applications/ibc_query/v1/query.proto)
     - [QueryCrossChainQueryResult](#ibc.applications.ibc_query.v1.QueryCrossChainQueryResult)
@@ -1593,7 +1594,7 @@ GenesisState defines the ICS31 ibc-query genesis state
 <a name="ibc.applications.ibc_query.v1.IBCQueryPacketData"></a>
 
 ### IBCQueryPacketData
-IBCQueryPacketData defines a struct for the packet payload
+IBCQueryPacketData defines a struct for the cross chain query packet payload
 
 
 | Field | Type | Label | Description |
@@ -1601,6 +1602,25 @@ IBCQueryPacketData defines a struct for the packet payload
 | `id` | [string](#string) |  |  |
 | `path` | [string](#string) |  |  |
 | `query_height` | [uint64](#uint64) |  |  |
+
+
+
+
+
+
+<a name="ibc.applications.ibc_query.v1.IBCQueryResultPacketData"></a>
+
+### IBCQueryResultPacketData
+IBCQueryPacketData defines a struct for the cross chain query result packet payload
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `path` | [string](#string) |  |  |
+| `query_height` | [uint64](#uint64) |  |  |
+| `result` | [QueryResult](#ibc.applications.ibc_query.v1.QueryResult) |  |  |
+| `data` | [bytes](#bytes) |  |  |
 | `proof_specs` | [ics23.ProofSpec](#ics23.ProofSpec) | repeated | TODO: Proof specifications used in verifying counterparty state |
 
 
