@@ -90,9 +90,6 @@
   
     - [QueryResult](#ibc.applications.ibc_query.v1.QueryResult)
   
-- [ibc/applications/ibc_query/v1/packet.proto](#ibc/applications/ibc_query/v1/packet.proto)
-    - [IBCQueryPacketData](#ibc.applications.ibc_query.v1.IBCQueryPacketData)
-  
 - [ibc/applications/ibc_query/v1/query.proto](#ibc/applications/ibc_query/v1/query.proto)
     - [QueryCrossChainQuery](#ibc.applications.ibc_query.v1.QueryCrossChainQuery)
     - [QueryCrossChainQueryResponse](#ibc.applications.ibc_query.v1.QueryCrossChainQueryResponse)
@@ -1565,39 +1562,6 @@ QueryResult
 
 
 
-<a name="ibc/applications/ibc_query/v1/packet.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## ibc/applications/ibc_query/v1/packet.proto
-
-
-
-<a name="ibc.applications.ibc_query.v1.IBCQueryPacketData"></a>
-
-### IBCQueryPacketData
-IBCQueryPacketData defines a struct for the packet payload
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| `id` | [string](#string) |  |  |
-| `path` | [string](#string) |  |  |
-| `query_height` | [uint64](#uint64) |  |  |
-
-
-
-
-
- <!-- end messages -->
-
- <!-- end enums -->
-
- <!-- end HasExtensions -->
-
- <!-- end services -->
-
-
-
 <a name="ibc/applications/ibc_query/v1/query.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -1631,7 +1595,6 @@ QueryCrossChainQueryResponse
 | `id` | [string](#string) |  |  |
 | `result` | [QueryResult](#ibc.applications.ibc_query.v1.QueryResult) |  |  |
 | `data` | [bytes](#bytes) |  |  |
-| `proof_specs` | [ics23.ProofSpec](#ics23.ProofSpec) | repeated | TODO Proof specifications used in verifying counterparty state |
 
 
 
