@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
@@ -12,7 +14,7 @@ import (
 func (k Keeper) SendQuery(ctx sdk.Context,
 	sourcePort,
 	sourceChannel string,
-	data []byte,
+	query types.CrossChainQuery,
 	timeoutHeight clienttypes.Height,
 	timeoutTimestamp uint64) error {
 	sourceChannelEnd, found := k.channelKeeper.GetChannel(ctx, sourcePort, sourceChannel)
@@ -35,8 +37,13 @@ func (k Keeper) SendQuery(ctx sdk.Context,
 		return sdkerrors.Wrap(channeltypes.ErrChannelCapabilityNotFound, "module does not own channel capability")
 	}
 
+	packetData := types.NewIBCQueryPacketData(
+		query.Id, query.Path, query.QueryHeight,
+	)
+
+
 	packet := channeltypes.NewPacket(
-		data,
+		packetData.GetBytes(),
 		sequence,
 		sourcePort,
 		sourceChannel,
@@ -66,7 +73,7 @@ func (k Keeper) OnRecvPacket(ctx sdk.Context, packet channeltypes.Packet) error 
 
 	queryResult = types.CrossChainQueryResult{
 		Id:     packetData.Id,
-		Result: queryResult.Result,
+		Result: packetData.Result,
 		Data:   packetData.Data,
 	}
 
@@ -81,8 +88,10 @@ func (k Keeper) OnRecvPacket(ctx sdk.Context, packet channeltypes.Packet) error 
 	return nil
 }
 
-func (k Keeper) OnAcknowledgementPacket(ctx sdk.Context, packet channeltypes.Packet, data types.MsgSubmitCrossChainQuery, ack channeltypes.Acknowledgement) error {
+func (k Keeper) OnAcknowledgementPacket(ctx sdk.Context, ack channeltypes.Acknowledgement) error {
 	switch ack.Response.(type) {
+	case *channeltypes.Acknowledgement_Error:
+		return fmt.Errorf("query packet acknowledgment error")
 	default:
 		// the acknowledgement succeeded on the receiving chain so nothing
 		// needs to be executed and no error needs to be returned
@@ -90,6 +99,7 @@ func (k Keeper) OnAcknowledgementPacket(ctx sdk.Context, packet channeltypes.Pac
 	}
 }
 
-func (k Keeper) OnTimeoutPacket(ctx sdk.Context, packet channeltypes.Packet, data types.MsgSubmitCrossChainQuery) error {
+func (k Keeper) OnTimeoutPacket(ctx sdk.Context) error {
+	sdkerrors.Wrapf(types.ErrQuerytTimeout, "query packet timeout")
 	return nil
 }

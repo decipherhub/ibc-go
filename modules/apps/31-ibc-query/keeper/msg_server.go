@@ -47,17 +47,10 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 
 	k.SetCrossChainQuery(ctx, query)
 
-	// TODO
-	// var data []byte
-	// err := query.Unmarshal(data)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	//if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, query.GetSignBytes(),
-	//	msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
-	//	return nil, err
-	//}
+	if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, query,
+		msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
+		return nil, err
+	}
 
 	// Log the query request
 	k.Logger(ctx).Info("query sent", "query_id", msg.GetQueryId())
