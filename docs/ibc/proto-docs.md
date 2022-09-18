@@ -80,15 +80,17 @@
   
     - [Msg](#ibc.applications.fee.v1.Msg)
   
+- [ibc/applications/ibc_query/v1/crosschainquery.proto](#ibc/applications/ibc_query/v1/crosschainquery.proto)
+    - [CrossChainQuery](#ibc.applications.ibc_query.v1.CrossChainQuery)
+    - [CrossChainQueryResult](#ibc.applications.ibc_query.v1.CrossChainQueryResult)
+  
+    - [QueryResult](#ibc.applications.ibc_query.v1.QueryResult)
+  
 - [ibc/applications/ibc_query/v1/event.proto](#ibc/applications/ibc_query/v1/event.proto)
     - [EventQuerySubmitted](#ibc.applications.ibc_query.v1.EventQuerySubmitted)
   
 - [ibc/applications/ibc_query/v1/genesis.proto](#ibc/applications/ibc_query/v1/genesis.proto)
-    - [CrossChainQuery](#ibc.applications.ibc_query.v1.CrossChainQuery)
-    - [CrossChainQueryResult](#ibc.applications.ibc_query.v1.CrossChainQueryResult)
     - [GenesisState](#ibc.applications.ibc_query.v1.GenesisState)
-  
-    - [QueryResult](#ibc.applications.ibc_query.v1.QueryResult)
   
 - [ibc/applications/ibc_query/v1/packet.proto](#ibc/applications/ibc_query/v1/packet.proto)
     - [IBCQueryPacketData](#ibc.applications.ibc_query.v1.IBCQueryPacketData)
@@ -1446,6 +1448,73 @@ Msg defines the ICS29 Msg service.
 
 
 
+<a name="ibc/applications/ibc_query/v1/crosschainquery.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## ibc/applications/ibc_query/v1/crosschainquery.proto
+
+
+
+<a name="ibc.applications.ibc_query.v1.CrossChainQuery"></a>
+
+### CrossChainQuery
+CrossChainQuery
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `path` | [string](#string) |  |  |
+| `local_timeout_height` | [ibc.core.client.v1.Height](#ibc.core.client.v1.Height) |  |  |
+| `local_timeout_timestamp` | [uint64](#uint64) |  |  |
+| `query_height` | [uint64](#uint64) |  |  |
+| `client_id` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="ibc.applications.ibc_query.v1.CrossChainQueryResult"></a>
+
+### CrossChainQueryResult
+CrossChainQueryResult
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `result` | [QueryResult](#ibc.applications.ibc_query.v1.QueryResult) |  |  |
+| `data` | [bytes](#bytes) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+
+<a name="ibc.applications.ibc_query.v1.QueryResult"></a>
+
+### QueryResult
+QueryResult
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| QUERY_RESULT_UNSPECIFIED | 0 | UNSPECIFIED |
+| QUERY_RESULT_SUCCESS | 1 | SUCCESS |
+| QUERY_RESULT_FAILURE | 2 | FAILURE |
+| QUERY_RESULT_TIMEOUT | 3 | TIMEOUT |
+
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
 <a name="ibc/applications/ibc_query/v1/event.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -1488,43 +1557,6 @@ EventQuerySubmitted emitted when process MsgSubmitCrossChainQuery tx
 
 
 
-<a name="ibc.applications.ibc_query.v1.CrossChainQuery"></a>
-
-### CrossChainQuery
-CrossChainQuery
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| `id` | [string](#string) |  |  |
-| `path` | [string](#string) |  |  |
-| `local_timeout_height` | [ibc.core.client.v1.Height](#ibc.core.client.v1.Height) |  |  |
-| `local_timeout_timestamp` | [uint64](#uint64) |  |  |
-| `query_height` | [uint64](#uint64) |  |  |
-| `client_id` | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="ibc.applications.ibc_query.v1.CrossChainQueryResult"></a>
-
-### CrossChainQueryResult
-CrossChainQueryResult
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| `id` | [string](#string) |  |  |
-| `result` | [QueryResult](#ibc.applications.ibc_query.v1.QueryResult) |  |  |
-| `data` | [bytes](#bytes) |  |  |
-
-
-
-
-
-
 <a name="ibc.applications.ibc_query.v1.GenesisState"></a>
 
 ### GenesisState
@@ -1542,20 +1574,6 @@ GenesisState defines the ICS31 ibc-query genesis state
 
 
  <!-- end messages -->
-
-
-<a name="ibc.applications.ibc_query.v1.QueryResult"></a>
-
-### QueryResult
-QueryResult
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| QUERY_RESULT_UNSPECIFIED | 0 | UNSPECIFIED |
-| QUERY_RESULT_SUCCESS | 1 | SUCCESS |
-| QUERY_RESULT_FAILURE | 2 | FAILURE |
-| QUERY_RESULT_TIMEOUT | 3 | TIMEOUT |
-
 
  <!-- end enums -->
 
@@ -1583,7 +1601,7 @@ IBCQueryPacketData defines a struct for the packet payload
 | `id` | [string](#string) |  |  |
 | `path` | [string](#string) |  |  |
 | `query_height` | [uint64](#uint64) |  |  |
-| `proof_specs` | [ics23.ProofSpec](#ics23.ProofSpec) | repeated | TODO Proof specifications used in verifying counterparty state |
+| `proof_specs` | [ics23.ProofSpec](#ics23.ProofSpec) | repeated | TODO: Proof specifications used in verifying counterparty state |
 
 
 

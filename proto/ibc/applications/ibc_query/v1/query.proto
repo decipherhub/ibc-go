@@ -5,7 +5,7 @@ package ibc.applications.ibc_query.v1;
 option go_package = "github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types";
 
 import "google/api/annotations.proto";
-import "ibc/applications/ibc_query/v1/genesis.proto";
+import "ibc/applications/ibc_query/v1/crosschainquery.proto";
 
 // Query
 service Query {

@@ -25,12 +25,10 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // IBCQueryPacketData defines a struct for the packet payload
 type IBCQueryPacketData struct {
-	Id          string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Path        string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-	QueryHeight uint64 `protobuf:"varint,3,opt,name=query_height,json=queryHeight,proto3" json:"query_height,omitempty"`
-	// TODO
-	// Proof specifications used in verifying counterparty state
-	ProofSpecs []*_go.ProofSpec `protobuf:"bytes,4,rep,name=proof_specs,json=proofSpecs,proto3" json:"proof_specs,omitempty"`
+	Id          string           `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Path        string           `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	QueryHeight uint64           `protobuf:"varint,3,opt,name=query_height,json=queryHeight,proto3" json:"query_height,omitempty"`
+	ProofSpecs  []*_go.ProofSpec `protobuf:"bytes,4,rep,name=proof_specs,json=proofSpecs,proto3" json:"proof_specs,omitempty"`
 }
 
 func (m *IBCQueryPacketData) Reset()         { *m = IBCQueryPacketData{} }
