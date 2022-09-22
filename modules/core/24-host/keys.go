@@ -33,6 +33,8 @@ const (
 	KeyChannelEndPrefix        = "channelEnds"
 	KeyChannelPrefix           = "channels"
 	KeyPortPrefix              = "ports"
+	KeyQueryPrefix             = "queries"
+	KeyQueryResultPrefix       = "queriesresult"
 	KeySequencePrefix          = "sequences"
 	KeyChannelCapabilityPrefix = "capabilities"
 	KeyNextSeqSendPrefix       = "nextSequenceSend"
@@ -232,4 +234,22 @@ func sequencePath(sequence uint64) string {
 // PortPath defines the path under which ports paths are stored on the capability module
 func PortPath(portID string) string {
 	return fmt.Sprintf("%s/%s", KeyPortPrefix, portID)
+}
+
+//ICS31
+
+func QueryKey(queryID string) []byte {
+	return []byte(queryPath(queryID))
+}
+
+func QueryResultKey(queryID string) []byte {
+	return []byte(queryResultPath(queryID))
+}
+
+func queryResultPath(queryID string) string {
+	return fmt.Sprintf("%s/%s", KeyQueryResultPrefix, queryID)
+}
+
+func queryPath(queryID string) string {
+	return fmt.Sprintf("%s/%s", KeyQueryPrefix, queryID)
 }

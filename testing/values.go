@@ -9,6 +9,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	ibcquerytypes "github.com/cosmos/ibc-go/v3/modules/apps/31-ibc-query/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	connectiontypes "github.com/cosmos/ibc-go/v3/modules/core/03-connection/types"
 	commitmenttypes "github.com/cosmos/ibc-go/v3/modules/core/23-commitment/types"
@@ -32,6 +33,7 @@ const (
 
 	// Application Ports
 	TransferPort = ibctransfertypes.ModuleName
+	QueryPort    = ibcquerytypes.ModuleName
 	MockPort     = mock.ModuleName
 
 	// used for testing proposals
