@@ -18,12 +18,6 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 
 	currentTimestamp := uint64(ctx.BlockTime().UnixNano())
 	currentHeight := clienttypes.GetSelfHeight(ctx)
-	if msg.LocalTimeoutHeight.RevisionHeight == 0 && msg.LocalTimeoutStamp == 0 {
-		return nil, sdkerrors.Wrapf(
-			types.ErrInvalidQuery,
-			"timeout height and timeout timestamp cannot both be 0",
-		)
-	}
 
 	// Sanity-check that localTimeoutHeight.
 	if msg.LocalTimeoutHeight.RevisionHeight <= currentHeight.RevisionHeight {
