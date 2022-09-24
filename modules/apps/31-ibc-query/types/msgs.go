@@ -1,6 +1,8 @@
 package types
 
 import (
+	"encoding/hex"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
 )
@@ -26,7 +28,12 @@ func NewMsgSubmitCrossChainQuery(id string, path string, localTimeoutHeight *cli
 
 func (msg MsgSubmitCrossChainQuery) GetQueryId() string { return msg.Id }
 
-func (msg MsgSubmitCrossChainQuery) GetPath() string { return msg.Path }
+func (msg MsgSubmitCrossChainQuery) GetQueryPath() []byte { 
+	src := []byte(msg.Path)
+	dst := make([]byte, hex.EncodedLen(len(src)))
+	hex.Encode(dst, src)
+	return dst 
+}
 
 func (msg MsgSubmitCrossChainQuery) GetTimeoutHeight() *clienttypes.Height {
 	return msg.LocalTimeoutHeight

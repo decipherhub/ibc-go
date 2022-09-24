@@ -65,12 +65,5 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	// emit event
 	EmitQueryEvent(ctx, msg)
 
-	// It can be used when event emit
-	//if err := ctx.EventManager().EmitTypedEvent(
-	//	types.NewEventQuerySubmitted(msg.Id, msg.Path, *msg.LocalTimeoutHeight, msg.LocalTimeoutStamp, msg.QueryHeight),
-	//); err != nil {
-	//	return nil, err
-	//}
-
 	return &types.MsgSubmitCrossChainQueryResponse{QueryId: query.Id}, nil
 }
