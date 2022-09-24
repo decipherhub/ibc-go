@@ -106,6 +106,5 @@ func (k Keeper) OnRecvPacket(ctx sdk.Context, packet channeltypes.Packet) error 
 
 
 func (k Keeper) OnTimeoutPacket(ctx sdk.Context) error {
-	sdkerrors.Wrapf(types.ErrTimeout, "query packet timeout")
-	return nil
+	return sdkerrors.Wrapf(types.ErrTimeout, "query packet timeout")
 }
