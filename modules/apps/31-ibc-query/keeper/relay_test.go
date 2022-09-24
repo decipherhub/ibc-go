@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
 	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
-	channeltypes "github.com/cosmos/ibc-go/v4/modules/core/04-channel/types"
 	ibctesting "github.com/cosmos/ibc-go/v4/testing"
 )
 
@@ -57,44 +56,6 @@ func (suite *KeeperTestSuite) TestSendQuery() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestOnAcknowledgementPacket() {
-	var (
-		successAck = channeltypes.NewResultAcknowledgement([]byte{byte(1)})
-		failedAck  = channeltypes.NewErrorAcknowledgement(fmt.Errorf("failed packet query"))
-		path       *ibctesting.Path
-	)
-
-	testCases := []struct {
-		msg      string
-		ack      channeltypes.Acknowledgement
-		malleate func()
-		success  bool // success of ack
-		expPass  bool
-	}{
-		{"success ack causes no-op", successAck, func() {}, true, true},
-		{"successful emit error", failedAck, func() {}, false, false},
-	}
-
-	for _, tc := range testCases {
-		tc := tc
-
-		suite.Run(fmt.Sprintf("Case %s", tc.msg), func() {
-			suite.SetupTest() // reset
-			path = NewQueryPath(suite.chainA, suite.chainB)
-			suite.coordinator.Setup(path)
-
-			tc.malleate()
-
-			err := suite.chainA.GetSimApp().IBCQueryKeeper.OnAcknowledgementPacket(suite.chainA.GetContext(), tc.ack)
-			if tc.expPass {
-				suite.Require().NoError(err)
-			} else {
-				suite.Require().Error(err)
-			}
-		})
-	}
-}
-
 func (suite *KeeperTestSuite) TestOnTimeoutPacket() {
 	var (
 		path *ibctesting.Path
@@ -106,7 +67,7 @@ func (suite *KeeperTestSuite) TestOnTimeoutPacket() {
 		expPass  bool
 	}{
 		{
-			"successful timeout from sender as source chain", func() {}, true,
+			"timeout from sender as source chain", func() {}, true,
 		},
 	}
 
@@ -123,11 +84,7 @@ func (suite *KeeperTestSuite) TestOnTimeoutPacket() {
 
 			err := suite.chainA.GetSimApp().IBCQueryKeeper.OnTimeoutPacket(suite.chainA.GetContext())
 
-			if tc.expPass {
-				suite.Require().NoError(err)
-			} else {
-				suite.Require().Error(err)
-			}
+			suite.Require().Error(err)
 		})
 	}
 }

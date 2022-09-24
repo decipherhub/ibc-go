@@ -34,7 +34,7 @@ const (
 	KeyChannelPrefix           = "channels"
 	KeyPortPrefix              = "ports"
 	KeyQueryPrefix             = "queries"
-	KeyQueryResultPrefix       = "queriesresult"
+	KeyQueryResultPrefix       = "queriesResult"
 	KeySequencePrefix          = "sequences"
 	KeyChannelCapabilityPrefix = "capabilities"
 	KeyNextSeqSendPrefix       = "nextSequenceSend"
