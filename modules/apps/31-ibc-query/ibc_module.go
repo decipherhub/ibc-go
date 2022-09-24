@@ -178,6 +178,16 @@ func (im IBCModule) OnRecvPacket(
 	return ack
 }
 
+// OnAcknowledgementPacket implements the IBCModule interface
+func (im IBCModule) OnAcknowledgementPacket(
+	ctx sdk.Context,
+	packet channeltypes.Packet,
+	acknowledgement []byte,
+	relayer sdk.AccAddress,
+) error {
+	return nil
+}
+
 // OnTimeoutPacket implements the IBCModule interface
 func (im IBCModule) OnTimeoutPacket(
 	ctx sdk.Context,
