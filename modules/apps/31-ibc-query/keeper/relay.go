@@ -14,9 +14,7 @@ import (
 func (k Keeper) SendQuery(ctx sdk.Context,
 	sourcePort,
 	sourceChannel string,
-	query types.CrossChainQuery,
-	timeoutHeight clienttypes.Height,
-	timeoutTimestamp uint64) error {
+	query types.CrossChainQuery) error {
 	sourceChannelEnd, found := k.channelKeeper.GetChannel(ctx, sourcePort, sourceChannel)
 	if !found {
 		return sdkerrors.Wrapf(channeltypes.ErrChannelNotFound, "port ID (%s) channel ID (%s)", sourcePort, sourceChannel)
@@ -41,7 +39,7 @@ func (k Keeper) SendQuery(ctx sdk.Context,
 		query.Id, query.Path, query.QueryHeight,
 	)
 
-
+	// timeoutHeight == 0 pass checking timeoutHeight on receiving chain
 	packet := channeltypes.NewPacket(
 		packetData.GetBytes(),
 		sequence,
@@ -49,8 +47,8 @@ func (k Keeper) SendQuery(ctx sdk.Context,
 		sourceChannel,
 		destinationPort,
 		destinationChannel,
-		timeoutHeight,
-		timeoutTimestamp,
+		clienttypes.ZeroHeight(),
+		query.LocalTimeoutTimestamp,
 	)
 
 	if err := k.ics4Wrapper.SendPacket(ctx, channelCap, packet); err != nil {
@@ -63,17 +61,28 @@ func (k Keeper) SendQuery(ctx sdk.Context,
 // OnRecvPacket processes a cross chain query result.
 func (k Keeper) OnRecvPacket(ctx sdk.Context, packet channeltypes.Packet) error {
 	var packetData types.IBCQueryResultPacketData
-	var queryResult types.CrossChainQueryResult
 
 	if err := types.ModuleCdc.UnmarshalJSON(packet.GetData(), &packetData); err != nil {
-		return sdkerrors.Wrapf(types.ErrUnknownDataType, "cannot unmarshal ICS-31 interchain query packet packetData")
+		return sdkerrors.Wrapf(types.ErrUnknownDataType, "cannot unmarshal ICS-31 cross chain query packetData")
 	}
 
 	if err := packetData.ValidateBasic(); err != nil {
 		return err
 	}
 
-	// TODO: validate query packetData with proof
+	queryResult := types.CrossChainQueryResult{
+		Id:     packetData.Id,
+		Result: packetData.Result,
+		Data:   packetData.Data,
+	}
+
+	query, found := k.GetCrossChainQuery(ctx, queryResult.Id)
+	// if CrossChainQuery of queryId doesn't exist in store, other relayer already submitted CrossChainQueryResult
+	if !found {
+		return sdkerrors.Wrapf(types.ErrCrossChainQueryNotFound, "cannot find ICS-31 cross chain query id %s", queryResult.Id)
+	}
+
+	k.DeleteCrossChainQuery(ctx, queryResult.Id)
 
 	queryResult = types.CrossChainQueryResult{
 		Id:     packetData.Id,
@@ -81,9 +90,14 @@ func (k Keeper) OnRecvPacket(ctx sdk.Context, packet channeltypes.Packet) error 
 		Data:   packetData.Data,
 	}
 
-	// remove CrossChainQuery from privateStore
-	if _, found := k.GetCrossChainQuery(ctx, queryResult.Id); found {
-		k.DeleteCrossChainQuery(ctx, queryResult.Id)
+	// check Timeout by comparing the latest height of chain, latest timestamp
+	selfHeight := clienttypes.GetSelfHeight(ctx)
+	selfBlockTime := uint64(ctx.BlockTime().UnixNano())
+	if selfHeight.GTE(query.LocalTimeoutHeight) {
+		queryResult.Result = types.QueryResult_QUERY_RESULT_TIMEOUT
+	}
+	if selfBlockTime >= query.LocalTimeoutTimestamp {
+		queryResult.Result = types.QueryResult_QUERY_RESULT_TIMEOUT
 	}
 
 	// store result in privateStore
@@ -104,6 +118,6 @@ func (k Keeper) OnAcknowledgementPacket(ctx sdk.Context, ack channeltypes.Acknow
 }
 
 func (k Keeper) OnTimeoutPacket(ctx sdk.Context) error {
-	sdkerrors.Wrapf(types.ErrQuerytTimeout, "query packet timeout")
+	sdkerrors.Wrapf(types.ErrTimeout, "query packet timeout")
 	return nil
 }
