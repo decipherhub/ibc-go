@@ -9,13 +9,13 @@ option go_package = "github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types
 
 // CrossChainQuery
 message CrossChainQuery {
-  string                    id                      = 1;
-  string                    path                    = 2;
-  ibc.core.client.v1.Height local_timeout_height    = 3
+  string                    id                   = 1;
+  string                    path                 = 2;
+  ibc.core.client.v1.Height local_timeout_height = 3
       [(gogoproto.moretags) = "yaml:\"timeout_height\"", (gogoproto.nullable) = false];
-  uint64                    local_timeout_timestamp = 4;
-  uint64                    query_height            = 5;
-  string                    client_id               = 6;
+  uint64 local_timeout_timestamp = 4;
+  uint64 query_height            = 5;
+  string client_id               = 6;
 }
 
 // QueryResult

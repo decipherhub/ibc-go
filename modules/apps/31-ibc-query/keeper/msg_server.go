@@ -20,17 +20,17 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	currentHeight := clienttypes.GetSelfHeight(ctx)
 
 	// Sanity-check that localTimeoutHeight.
-	if msg.LocalTimeoutHeight.RevisionHeight <= currentHeight.RevisionHeight {
+	if msg.LocalTimeoutHeight.RevisionHeight > 0 && msg.LocalTimeoutHeight.RevisionHeight <= currentHeight.RevisionHeight {
 		return nil, sdkerrors.Wrapf(
 			types.ErrTimeout,
-			"localTimeoutHeight is not 0 and current height >= localTimeoutHeight(%d >= %d)", currentHeight.RevisionHeight, msg.LocalTimeoutHeight.RevisionHeight,
+			"localTimeoutHeight > 0 and current height >= localTimeoutHeight(%d >= %d)", currentHeight.RevisionHeight, msg.LocalTimeoutHeight.RevisionHeight,
 		)
 	}
 	// Sanity-check that localTimeoutTimestamp
-	if msg.LocalTimeoutStamp <= currentTimestamp {
+	if msg.LocalTimeoutStamp > 0 && msg.LocalTimeoutStamp <= currentTimestamp {
 		return nil, sdkerrors.Wrapf(
 			types.ErrTimeout,
-			"localTimeoutTimestamp is not 0 and current timestamp >= localTimeoutTimestamp(%d >= %d)", currentTimestamp, msg.LocalTimeoutStamp,
+			"localTimeoutTimestamp > 0 and current timestamp >= localTimeoutTimestamp(%d >= %d)", currentTimestamp, msg.LocalTimeoutStamp,
 		)
 	}
 
@@ -52,17 +52,44 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	}
 
 	// Log the query request
-	k.Logger(ctx).Info("query sent", "query_id", msg.GetQueryId())
+	k.Logger(ctx).Info("query sent", "query_id", msg.GetId())
 
 	// emit event
 	EmitQueryEvent(ctx, msg)
 
-	// It can be used when event emit
-	//if err := ctx.EventManager().EmitTypedEvent(
-	//	types.NewEventQuerySubmitted(msg.Id, msg.Path, *msg.LocalTimeoutHeight, msg.LocalTimeoutStamp, msg.QueryHeight),
-	//); err != nil {
-	//	return nil, err
-	//}
-
 	return &types.MsgSubmitCrossChainQueryResponse{QueryId: query.Id}, nil
+}
+
+func (k Keeper) SubmitCrossChainQueryResult(goCtx context.Context, msg *types.MsgSubmitCrossChainQueryResult) (*types.MsgSubmitCrossChainQueryResultResponse, error) {
+	// UnwrapSDKContext
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	queryResult := types.CrossChainQueryResult{
+		Id:     msg.Id,
+		Result: msg.Result,
+		Data:   msg.Data,
+	}
+
+	query, found := k.GetCrossChainQuery(ctx, queryResult.Id)
+	// if CrossChainQuery of queryId doesn't exist in store, other relayer already submitted CrossChainQueryResult
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrCrossChainQueryNotFound, "cannot find ICS-31 cross chain query id %s", queryResult.Id)
+	}
+
+	k.DeleteCrossChainQuery(ctx, queryResult.Id)
+
+	// check Timeout by comparing the latest height of chain, latest timestamp
+	selfHeight := clienttypes.GetSelfHeight(ctx)
+	selfBlockTime := uint64(ctx.BlockTime().UnixNano())
+	if selfHeight.GTE(query.LocalTimeoutHeight) {
+		queryResult.Result = types.QueryResult_QUERY_RESULT_TIMEOUT
+	}
+	if selfBlockTime >= query.LocalTimeoutTimestamp {
+		queryResult.Result = types.QueryResult_QUERY_RESULT_TIMEOUT
+	}
+
+	// store result in privateStore
+	k.SetCrossChainQueryResult(ctx, queryResult)
+
+	return &types.MsgSubmitCrossChainQueryResultResponse{}, nil
 }
