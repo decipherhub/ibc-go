@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types"
@@ -106,16 +104,6 @@ func (k Keeper) OnRecvPacket(ctx sdk.Context, packet channeltypes.Packet) error 
 	return nil
 }
 
-func (k Keeper) OnAcknowledgementPacket(ctx sdk.Context, ack channeltypes.Acknowledgement) error {
-	switch ack.Response.(type) {
-	case *channeltypes.Acknowledgement_Error:
-		return fmt.Errorf("query packet acknowledgment error")
-	default:
-		// the acknowledgement succeeded on the receiving chain so nothing
-		// needs to be executed and no error needs to be returned
-		return nil
-	}
-}
 
 func (k Keeper) OnTimeoutPacket(ctx sdk.Context) error {
 	sdkerrors.Wrapf(types.ErrTimeout, "query packet timeout")
