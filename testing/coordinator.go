@@ -142,6 +142,16 @@ func (coord *Coordinator) CreateTransferChannels(path *Path) {
 	coord.CreateChannels(path)
 }
 
+// CreateQueryChannels constructs and executes channel handshake messages to create OPEN
+// ibc-query channels on chainA and chainB. The function expects the channels to be
+// successfully opened otherwise testing will fail.
+func (coord *Coordinator) CreateQueryChannels(path *Path) {
+	path.EndpointA.ChannelConfig.PortID = QueryPort
+	path.EndpointB.ChannelConfig.PortID = QueryPort
+
+	coord.CreateChannels(path)
+}
+
 // CreateChannel constructs and executes channel handshake messages in order to create
 // OPEN channels on chainA and chainB. The function expects the channels to be successfully
 // opened otherwise testing will fail.
