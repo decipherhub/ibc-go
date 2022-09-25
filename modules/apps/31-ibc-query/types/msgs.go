@@ -13,7 +13,7 @@ const (
 )
 
 // NewMsgSubmitCrossChainQuery creates a new instance of NewMsgSubmitCrossChainQuery
-func NewMsgSubmitCrossChainQuery(id string, path string, localTimeoutHeight *clienttypes.Height, localTimeoutStamp uint64, queryHeight uint64, creator string, srcPort string, srcChannel string) *MsgSubmitCrossChainQuery {
+func NewMsgSubmitCrossChainQuery(id string, path string, localTimeoutHeight clienttypes.Height, localTimeoutStamp uint64, queryHeight uint64, creator string, srcPort string, srcChannel string) *MsgSubmitCrossChainQuery {
 	return &MsgSubmitCrossChainQuery{
 		Id:                 id,
 		Path:               path,
@@ -35,7 +35,7 @@ func (msg MsgSubmitCrossChainQuery) GetQueryPath() []byte {
 	return dst 
 }
 
-func (msg MsgSubmitCrossChainQuery) GetTimeoutHeight() *clienttypes.Height {
+func (msg MsgSubmitCrossChainQuery) GetTimeoutHeight() clienttypes.Height {
 	return msg.LocalTimeoutHeight
 }
 

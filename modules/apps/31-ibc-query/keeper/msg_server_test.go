@@ -35,14 +35,14 @@ func (suite *KeeperTestSuite) TestSubmitCrossChainQuery() {
 			true,
 			func() {
 				suite.coordinator.CreateChannels(path)
-				msg = types.NewMsgSubmitCrossChainQuery("query-1", "test/query_path", &timeoutHeight, timeoutTimestamp, queryHeight.RevisionHeight, addr, path.EndpointA.ChannelConfig.PortID, path.EndpointA.ChannelID)
+				msg = types.NewMsgSubmitCrossChainQuery("query-1", "test/query_path", timeoutHeight, timeoutTimestamp, queryHeight.RevisionHeight, addr, path.EndpointA.ChannelConfig.PortID, path.EndpointA.ChannelID)
 			},
 		},
 	}
 
 	for _, tc := range testCases {
 		suite.SetupTest()
-		path = NewQueryrPath(suite.chainA, suite.chainB)
+		path = NewQueryPath(suite.chainA, suite.chainB)
 		suite.coordinator.SetupConnections(path)
 
 		tc.malleate()

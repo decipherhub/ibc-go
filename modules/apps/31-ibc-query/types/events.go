@@ -9,7 +9,7 @@ import (
 
 const (
 	EventTypeTimeout = "timeout"
-	EventSendQuery   = "sendQuery"
+	EventSendQuery   = "send_query"
 	EventTypePacket  = "ibc_query_packet"
 
 	AttributeKeyQueryID          = "query_id"
@@ -17,8 +17,6 @@ const (
 	AttributeKeyQueryPath        = "query_path"
 	AttributeKeyAckSuccess       = "success"
 	AttributeKeyAckError         = "error"
-
-	QuerySubmitted = "QuerySubmitted"
 )
 
 var (
@@ -32,7 +30,7 @@ func NewEventQuerySubmitted(
 	return &EventQuerySubmitted{
 		Id:                 id,
 		Path:               path,
-		LocalTimeoutHeight: &localTimeoutHeight,
+		LocalTimeoutHeight: localTimeoutHeight,
 		LocalTimeoutStamp:  localTimeoutStamp,
 		QueryHeight:        queryHeight,
 	}

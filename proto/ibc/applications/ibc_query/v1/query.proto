@@ -5,29 +5,25 @@ package ibc.applications.ibc_query.v1;
 option go_package = "github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/types";
 
 import "google/api/annotations.proto";
-import "ibc/applications/ibc_query/v1/genesis.proto";
-import "proofs.proto";
+import "ibc/applications/ibc_query/v1/crosschainquery.proto";
 
 // Query
 service Query {
-  // query CrossChainQuery
-  rpc CrossChainQuery(QueryCrossChainQuery) returns (QueryCrossChainQueryResponse) {
+  // query CrossChainQueryResult
+  rpc CrossChainQueryResult(QueryCrossChainQueryResult) returns (QueryCrossChainQueryResultResponse) {
     option (google.api.http).get = "/ibc/apps/ibc-query/v1/{id}";
   }
 }
 
 // QueryCrossChainQuery
-message QueryCrossChainQuery {
+message QueryCrossChainQueryResult {
   // query id
   string id = 1;
 }
 
 // QueryCrossChainQueryResponse
-message QueryCrossChainQueryResponse {
-  string                     id        = 1;
-  QueryResult                result    = 2;
-  bytes                      data      = 3;
-  //TODO 
-  // Proof specifications used in verifying counterparty state
-  repeated ics23.ProofSpec   proof_specs = 4; 
+message QueryCrossChainQueryResultResponse {
+  string      id     = 1;
+  QueryResult result = 2;
+  bytes       data   = 3;
 }

@@ -19,17 +19,17 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 	currentTimestamp := uint64(ctx.BlockTime().UnixNano())
 	currentHeight := clienttypes.GetSelfHeight(ctx)
 
-	// Sanity-check that localTimeoutHeight is 0 or greater than the current height, otherwise the query will always time out.
-	if !(msg.LocalTimeoutHeight.RevisionHeight == 0 || msg.LocalTimeoutHeight.RevisionHeight > currentHeight.RevisionHeight) {
+	// Sanity-check that localTimeoutHeight.
+	if msg.LocalTimeoutHeight.RevisionHeight <= currentHeight.RevisionHeight {
 		return nil, sdkerrors.Wrapf(
-			types.ErrInvalidTimeoutHeight,
-			"localTimeoutHeight is not 0 and current height >= localTimeoutHeight(%d >= %d)", currentHeight.RevisionHeight, msg.LocalTimeoutHeight,
+			types.ErrTimeout,
+			"localTimeoutHeight is not 0 and current height >= localTimeoutHeight(%d >= %d)", currentHeight.RevisionHeight, msg.LocalTimeoutHeight.RevisionHeight,
 		)
 	}
-	// Sanity-check that localTimeoutTimestamp is 0 or greater than the current timestamp, otherwise the query will always time out.
-	if !(msg.LocalTimeoutStamp == 0 || msg.LocalTimeoutStamp > currentTimestamp) {
+	// Sanity-check that localTimeoutTimestamp
+	if msg.LocalTimeoutStamp <= currentTimestamp {
 		return nil, sdkerrors.Wrapf(
-			types.ErrQuerytTimeout,
+			types.ErrTimeout,
 			"localTimeoutTimestamp is not 0 and current timestamp >= localTimeoutTimestamp(%d >= %d)", currentTimestamp, msg.LocalTimeoutStamp,
 		)
 	}
@@ -47,17 +47,9 @@ func (k Keeper) SubmitCrossChainQuery(goCtx context.Context, msg *types.MsgSubmi
 
 	k.SetCrossChainQuery(ctx, query)
 
-	// TODO
-	// var data []byte
-	// err := query.Unmarshal(data)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	//if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, query.GetSignBytes(),
-	//	msg.LocalTimeoutHeight, msg.LocalTimeoutStamp); err != nil {
-	//	return nil, err
-	//}
+	if err := k.SendQuery(ctx, msg.SourcePort, msg.SourceChannel, query); err != nil {
+		return nil, err
+	}
 
 	// Log the query request
 	k.Logger(ctx).Info("query sent", "query_id", msg.GetQueryId())

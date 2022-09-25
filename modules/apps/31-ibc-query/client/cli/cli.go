@@ -15,7 +15,7 @@ func GetQueryCmd() *cobra.Command {
 	}
 
 	queryCmd.AddCommand(
-
+		GetCmdQueryCrossChainQueryResult(),
 	)
 
 	return queryCmd
@@ -25,7 +25,7 @@ func GetQueryCmd() *cobra.Command {
 func NewTxCmd() *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:                        "ibc-query",
-		Short:                      "IBC query command",
+		Short:                      "Query cross chain query result",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
