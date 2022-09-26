@@ -86,15 +86,11 @@
   
     - [QueryResult](#ibc.applications.ibc_query.v1.QueryResult)
   
-- [ibc/applications/ibc_query/v1/event.proto](#ibc/applications/ibc_query/v1/event.proto)
-    - [EventQuerySubmitted](#ibc.applications.ibc_query.v1.EventQuerySubmitted)
-  
 - [ibc/applications/ibc_query/v1/genesis.proto](#ibc/applications/ibc_query/v1/genesis.proto)
     - [GenesisState](#ibc.applications.ibc_query.v1.GenesisState)
   
 - [ibc/applications/ibc_query/v1/packet.proto](#ibc/applications/ibc_query/v1/packet.proto)
     - [IBCQueryPacketData](#ibc.applications.ibc_query.v1.IBCQueryPacketData)
-    - [IBCQueryResultPacketData](#ibc.applications.ibc_query.v1.IBCQueryResultPacketData)
   
 - [ibc/applications/ibc_query/v1/query.proto](#ibc/applications/ibc_query/v1/query.proto)
     - [QueryCrossChainQueryResult](#ibc.applications.ibc_query.v1.QueryCrossChainQueryResult)
@@ -105,6 +101,8 @@
 - [ibc/applications/ibc_query/v1/tx.proto](#ibc/applications/ibc_query/v1/tx.proto)
     - [MsgSubmitCrossChainQuery](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQuery)
     - [MsgSubmitCrossChainQueryResponse](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResponse)
+    - [MsgSubmitCrossChainQueryResult](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResult)
+    - [MsgSubmitCrossChainQueryResultResponse](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResultResponse)
   
     - [Msg](#ibc.applications.ibc_query.v1.Msg)
   
@@ -1516,41 +1514,6 @@ QueryResult
 
 
 
-<a name="ibc/applications/ibc_query/v1/event.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## ibc/applications/ibc_query/v1/event.proto
-
-
-
-<a name="ibc.applications.ibc_query.v1.EventQuerySubmitted"></a>
-
-### EventQuerySubmitted
-EventQuerySubmitted emitted when process MsgSubmitCrossChainQuery tx
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| `id` | [string](#string) |  |  |
-| `path` | [string](#string) |  |  |
-| `local_timeout_height` | [ibc.core.client.v1.Height](#ibc.core.client.v1.Height) |  |  |
-| `local_timeout_stamp` | [uint64](#uint64) |  |  |
-| `query_height` | [uint64](#uint64) |  |  |
-
-
-
-
-
- <!-- end messages -->
-
- <!-- end enums -->
-
- <!-- end HasExtensions -->
-
- <!-- end services -->
-
-
-
 <a name="ibc/applications/ibc_query/v1/genesis.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -1602,26 +1565,6 @@ IBCQueryPacketData defines a struct for the cross chain query packet payload
 | `id` | [string](#string) |  |  |
 | `path` | [string](#string) |  |  |
 | `query_height` | [uint64](#uint64) |  |  |
-
-
-
-
-
-
-<a name="ibc.applications.ibc_query.v1.IBCQueryResultPacketData"></a>
-
-### IBCQueryResultPacketData
-IBCQueryPacketData defines a struct for the cross chain query result packet payload
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| `id` | [string](#string) |  |  |
-| `path` | [string](#string) |  |  |
-| `query_height` | [uint64](#uint64) |  |  |
-| `result` | [QueryResult](#ibc.applications.ibc_query.v1.QueryResult) |  |  |
-| `data` | [bytes](#bytes) |  |  |
-| `proof_specs` | [ics23.ProofSpec](#ics23.ProofSpec) | repeated | TODO: Proof specifications used in verifying counterparty state |
 
 
 
@@ -1740,6 +1683,37 @@ MsgSubmitCrossChainQueryResponse
 
 
 
+
+<a name="ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResult"></a>
+
+### MsgSubmitCrossChainQueryResult
+MsgSubmitCrossChainQueryResult
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `path` | [string](#string) |  |  |
+| `query_height` | [uint64](#uint64) |  |  |
+| `result` | [QueryResult](#ibc.applications.ibc_query.v1.QueryResult) |  |  |
+| `data` | [bytes](#bytes) |  |  |
+| `sender` | [string](#string) |  |  |
+| `proof_specs` | [ics23.ProofSpec](#ics23.ProofSpec) | repeated | TODO: Proof specifications used in verifying counterparty state |
+
+
+
+
+
+
+<a name="ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResultResponse"></a>
+
+### MsgSubmitCrossChainQueryResultResponse
+MsgSubmitCrossChainQueryResultResponse
+
+
+
+
+
  <!-- end messages -->
 
  <!-- end enums -->
@@ -1755,6 +1729,7 @@ Msg
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
 | `SubmitCrossChainQuery` | [MsgSubmitCrossChainQuery](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQuery) | [MsgSubmitCrossChainQueryResponse](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResponse) | submit query request | |
+| `SubmitCrossChainQueryResult` | [MsgSubmitCrossChainQueryResult](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResult) | [MsgSubmitCrossChainQueryResultResponse](#ibc.applications.ibc_query.v1.MsgSubmitCrossChainQueryResultResponse) | submit query result | |
 
  <!-- end services -->
 

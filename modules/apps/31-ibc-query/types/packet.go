@@ -30,17 +30,3 @@ func (iqpd IBCQueryPacketData) ValidateBasic() error {
 func (iqpd IBCQueryPacketData) GetBytes() []byte {
 	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&iqpd))
 }
-
-// ValidateBasic is used for validating the query packet data
-func (iqrpd IBCQueryResultPacketData) ValidateBasic() error {
-	// TODO: validate query packetData with proof
-	if strings.TrimSpace(iqrpd.Path) == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "sender address cannot be blank")
-	}
-	return nil
-}
-
-// GetBytes is a helper for serialising
-func (iqrpd IBCQueryResultPacketData) GetBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&iqrpd))
-}
