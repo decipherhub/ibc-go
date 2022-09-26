@@ -13,9 +13,9 @@ func EmitQueryEvent(ctx sdk.Context, query *types.MsgSubmitCrossChainQuery) {
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventSendQuery,
-			sdk.NewAttribute(types.AttributeKeyQueryID, string(query.GetQueryId())),
-			sdk.NewAttribute(types.AttributeKeyQueryHeight, fmt.Sprintf("%d",query.GetQueryHeight())),
-			sdk.NewAttribute(types.AttributeKeyQueryPath, fmt.Sprintf("%x",query.GetQueryPath())),
+			sdk.NewAttribute(types.AttributeKeyQueryID, query.GetQueryId()),
+			sdk.NewAttribute(types.AttributeKeyQueryHeight, fmt.Sprintf("%d", query.GetQueryHeight())),
+			sdk.NewAttribute(types.AttributeKeyQueryPath, fmt.Sprintf("%x", query.GetQueryPath())),
 		),
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
