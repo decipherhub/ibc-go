@@ -86,9 +86,6 @@
   
     - [QueryResult](#ibc.applications.ibc_query.v1.QueryResult)
   
-- [ibc/applications/ibc_query/v1/event.proto](#ibc/applications/ibc_query/v1/event.proto)
-    - [EventQuerySubmitted](#ibc.applications.ibc_query.v1.EventQuerySubmitted)
-  
 - [ibc/applications/ibc_query/v1/genesis.proto](#ibc/applications/ibc_query/v1/genesis.proto)
     - [GenesisState](#ibc.applications.ibc_query.v1.GenesisState)
   
@@ -1508,41 +1505,6 @@ QueryResult
 | QUERY_RESULT_FAILURE | 2 | FAILURE |
 | QUERY_RESULT_TIMEOUT | 3 | TIMEOUT |
 
-
- <!-- end enums -->
-
- <!-- end HasExtensions -->
-
- <!-- end services -->
-
-
-
-<a name="ibc/applications/ibc_query/v1/event.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## ibc/applications/ibc_query/v1/event.proto
-
-
-
-<a name="ibc.applications.ibc_query.v1.EventQuerySubmitted"></a>
-
-### EventQuerySubmitted
-EventQuerySubmitted emitted when process MsgSubmitCrossChainQuery tx
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| `id` | [string](#string) |  |  |
-| `path` | [string](#string) |  |  |
-| `local_timeout_height` | [ibc.core.client.v1.Height](#ibc.core.client.v1.Height) |  |  |
-| `local_timeout_stamp` | [uint64](#uint64) |  |  |
-| `query_height` | [uint64](#uint64) |  |  |
-
-
-
-
-
- <!-- end messages -->
 
  <!-- end enums -->
 
