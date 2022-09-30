@@ -24,6 +24,7 @@
   
 - [ibc/applications/ibc_query/v1/genesis.proto](#ibc/applications/ibc_query/v1/genesis.proto)
     - [GenesisState](#ibc.applications.ibc_query.v1.GenesisState)
+    - [Params](#ibc.applications.ibc_query.v1.Params)
   
 - [ibc/applications/ibc_query/v1/packet.proto](#ibc/applications/ibc_query/v1/packet.proto)
     - [IBCQueryPacketData](#ibc.applications.ibc_query.v1.IBCQueryPacketData)
@@ -566,6 +567,17 @@ GenesisState defines the ICS31 ibc-query genesis state
 | `queries` | [CrossChainQuery](#ibc.applications.ibc_query.v1.CrossChainQuery) | repeated |  |
 | `results` | [CrossChainQueryResult](#ibc.applications.ibc_query.v1.CrossChainQueryResult) | repeated |  |
 | `port_id` | [string](#string) |  |  |
+| `params` | [Params](#ibc.applications.ibc_query.v1.Params) |  |  |
+
+
+
+
+
+
+<a name="ibc.applications.ibc_query.v1.Params"></a>
+
+### Params
+
 
 
 

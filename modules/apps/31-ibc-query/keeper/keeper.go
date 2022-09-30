@@ -29,10 +29,15 @@ type Keeper struct {
 // NewKeeper creates a new 31-ibc-query Keeper instance
 func NewKeeper(cdc codec.BinaryCodec,
 	key sdk.StoreKey,
+	paramSpace paramtypes.Subspace,
 	scopedKeeper capabilitykeeper.ScopedKeeper,
 	ics4Wrapper types.ICS4Wrapper,
 	channelKeeper types.ChannelKeeper,
 	portKeeper types.PortKeeper) Keeper {
+	if !paramSpace.HasKeyTable() {
+		paramSpace = paramSpace.WithKeyTable(types.ParamKeyTable())
+	}
+
 	return Keeper{
 		cdc:           cdc,
 		storeKey:      key,
