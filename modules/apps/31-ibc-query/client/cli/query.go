@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/version"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -14,7 +15,7 @@ import (
 // GetCmdQueryCrossChainQueryResult defines the command to query CrossChainQueryResult from store
 func GetCmdQueryCrossChainQueryResult() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "query-ibc-query-result [query id]",
+		Use:     "ibc-query-result [query id]",
 		Short:   "query cross chain query result with query id",
 		Long:    "query cross chain query result with query id",
 		Example: fmt.Sprintf("%s query ibc-query query-ibc-query-result 3", version.AppName),
