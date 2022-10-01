@@ -63,36 +63,3 @@ func NewMsgCrossChainQueryCmd() *cobra.Command {
 
 	return cmd
 }
-
-
-// func NewMsgSubmitCrossChainQueryResultCmd() *cobra.Command {
-// 	cmd := &cobra.Command{
-// 		Use:   "ibc-query-result [query-id] [query-path] [query-height] [query-result] [query-data]",
-// 		Short: "submit query results",
-// 		Long:  "submit the query result to the querying chain. Query data is result of querying the queried chain.",
-// 		Args:  cobra.ExactArgs(3),
-// 		RunE: func(cmd *cobra.Command, args []string) error {
-// 			clientCtx, err := client.GetClientTxContext(cmd)
-// 			if err != nil {
-// 				return err
-// 			}
-
-// 			queryId := args[0]
-// 			queryPath := args[1]
-// 			queryHeight, err := cast.ToUint64E(args[2])
-// 			if err != nil {
-// 				return err
-// 			}
-// 			queryResult := args[3]
-// 			queryData := args[4]
-	
-
-// 			msg := types.NewMsgSubmitCrossChainQueryResult(queryId, queryPath, queryHeight, queryResult, queryData, nil)
-// 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-// 		},
-// 	}
-
-// 	flags.AddTxFlagsToCmd(cmd)
-
-// 	return cmd
-// }
