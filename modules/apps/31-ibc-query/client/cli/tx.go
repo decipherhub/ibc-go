@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"strconv"
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/ibc-go/v4/modules/apps/31-ibc-query/client/utils"
@@ -14,51 +14,47 @@ import (
 	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
 )
 
-const (
-	flagPacketTimeoutHeight    = "packet-timeout-height"
-	flagPacketTimeoutTimestamp = "packet-timeout-timestamp"
-	flagAbsoluteTimeouts       = "absolute-timeouts"
-)
 
 func NewMsgCrossChainQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "cross-chain-query [src-port] [src-channel] [query-path] [query-height]",
-		Short: "Request ibc query on a given channel.",
-		Long:  strings.TrimSpace(`Register a payee address on a given channel.`),
-		Args:  cobra.ExactArgs(3),
+		Use:   "ibc-query [src-port] [src-channel] [query-path] [query-height] [timeout-timeheight] [timeout-timestamp]",
+		Short: "submit an ibc query",
+		Long:  strings.TrimSpace(`submit an ibc query to queried chain.
+		Timeout height and the timeout stamp are the local timeoutHeight and the local timeoutstamp, respectively, 
+		which are used to validate the query result`),
+		Args:  cobra.ExactArgs(6),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
-
 			creator := clientCtx.GetFromAddress().String()
+
+			srcPort := args[0]
+			srcChannel := args[1]
+			path := args[2]
+			queryHeight, err := cast.ToUint64E(args[3])
+			if err != nil {
+				return err
+			}
+
 			queryId, err := utils.GetQueryIdentifier()
 			if err != nil {
 				return err
 			}
 
-			srcPort := args[0]
-			srcChannel := args[1]
-			path := args[2]
-			queryHeight, _ := strconv.ParseUint(args[2], 10, 64)
-
-			timeoutHeightStr, err := cmd.Flags().GetString(flagPacketTimeoutHeight)
-			if err != nil {
-				return err
-			}
-			timeoutHeight, err := clienttypes.ParseHeight(timeoutHeightStr)
+			timeoutHeight, err := clienttypes.ParseHeight( args[4])
 			if err != nil {
 				return err
 			}
 
-			timeoutTimestamp, err := cmd.Flags().GetUint64(flagPacketTimeoutTimestamp)
+			timeoutTimestamp, err := cast.ToUint64E(args[5])
 			if err != nil {
 				return err
 			}
+	
 
 			msg := types.NewMsgSubmitCrossChainQuery(queryId, path, timeoutHeight, timeoutTimestamp, queryHeight, creator, srcPort, srcChannel)
-
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
